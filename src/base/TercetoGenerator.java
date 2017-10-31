@@ -129,8 +129,8 @@ public class TercetoGenerator {
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
-        aux.setField1(field1);
-        aux.setField2(field2);
+        aux.setField1(this.lastDeclaration(field1));
+        aux.setField2(this.lastDeclaration(field2));
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
