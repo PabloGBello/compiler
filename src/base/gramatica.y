@@ -2,13 +2,6 @@
 package base;
 import base.SymbolTable;
 import base.LexicalAnalizer;
-<<<<<<< HEAD
-=======
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
->>>>>>> 9102da3d7cec11fd14e76ac7cc1a201eda8d7e20
 import java.util.*;
 %}
 
@@ -120,11 +113,7 @@ asignacion : ID '=' expresion'.'                                          {tg.se
            | ID error expresion'.'                                        {yyerror("Asignacion incorrecta.");}
 ;
 
-<<<<<<< HEAD
 bloque : BEGIN grupo_de_sentencias END
-=======
-bloque : BEGIN grupo_de_sentencias END                                 
->>>>>>> 9102da3d7cec11fd14e76ac7cc1a201eda8d7e20
        | BEGIN error END                                                  {yyerror("Error en bloque.");}
 ;
 
@@ -156,16 +145,7 @@ factor : ID                                                               {tg.se
 
 LexicalAnalizer la;
 TercetoGenerator tg;
-<<<<<<< HEAD
 ArrayList<String> aDeclarar = new ArrayList();
-=======
-public static int CONSTANTE = 275;
-String dir;
-BufferedWriter bw;
-BufferedWriter bw_sintaxError;
-int iii = 0;
-List<String> aDeclarar = new ArrayList<String>();
->>>>>>> 9102da3d7cec11fd14e76ac7cc1a201eda8d7e20
 
 public Parser(String dir) {
   la = new LexicalAnalizer(dir);
@@ -213,9 +193,3 @@ public LexicalAnalizer getLa() {
     return la;
 }
 
-public void declarar(String type){
-    SymbolTable tab = la.getSymbolTable();
-    for (String s : aDeclarar){
-        tab.setType(s,type);
-    }
-}
