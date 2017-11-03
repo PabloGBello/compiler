@@ -57,10 +57,32 @@ public class Conversions {
         comparacion.add(Constants.CADENA, Constants.FLOAT, -1);
         comparacion.add(Constants.CADENA, Constants.CADENA, Constants.CADENA);
 
+        producto.add(Constants.INT, Constants.INT, Constants.INT);
+        producto.add(Constants.INT, Constants.FLOAT, -1);
+        producto.add(Constants.INT, Constants.CADENA, -1);
+        producto.add(Constants.FLOAT, Constants.INT, -1);
+        producto.add(Constants.FLOAT, Constants.FLOAT, Constants.FLOAT);
+        producto.add(Constants.FLOAT, Constants.CADENA, -1);
+        producto.add(Constants.CADENA, Constants.INT, -1);
+        producto.add(Constants.CADENA, Constants.FLOAT, -1);
+        producto.add(Constants.CADENA, Constants.CADENA, Constants.CADENA);
+
+        division.add(Constants.INT, Constants.INT, Constants.INT);
+        division.add(Constants.INT, Constants.FLOAT, -1);
+        division.add(Constants.INT, Constants.CADENA, -1);
+        division.add(Constants.FLOAT, Constants.INT, -1);
+        division.add(Constants.FLOAT, Constants.FLOAT, Constants.FLOAT);
+        division.add(Constants.FLOAT, Constants.CADENA, -1);
+        division.add(Constants.CADENA, Constants.INT, -1);
+        division.add(Constants.CADENA, Constants.FLOAT, -1);
+        division.add(Constants.CADENA, Constants.CADENA, Constants.CADENA);
+
         matrices.put("+", suma);
         matrices.put("=", asignacion);
         matrices.put("==", comparacion);
-
+        matrices.put("-", resta);
+        matrices.put("*", producto);
+        matrices.put("/", division);
 
     }
 
