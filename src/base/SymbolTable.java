@@ -58,8 +58,7 @@ public class SymbolTable {
 
         if (!simbolos.containsKey(key))
             simbolos.put(key, new ArrayList<Data>());
-
-        Data data = new Data(value, type);
+        Data data = new Data(value, String.valueOf(type));
         data.setCode(Constants.CTE);
         simbolos.get(key).add(data);
     }
@@ -112,7 +111,12 @@ public class SymbolTable {
         List<Data> aux = simbolos.get(Constants.ID);
         for (Data var : aux){
             if (lex.equals(var.getLexema())) {
-                var.setType(type);
+                if(type.equals("INT"))
+                    var.setType(String.valueOf(Constants.INT));
+                if(type.equals("FLOAT"))
+                    var.setType(String.valueOf(Constants.FLOAT));
+                if(type.equals("STRING"))
+                    var.setType(String.valueOf(Constants.CADENA));
             }
         }
     }

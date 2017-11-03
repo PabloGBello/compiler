@@ -13,6 +13,7 @@ public class TercetoGenerator {
     boolean expresionClosed = false;
     int flagOpAnt  = -1;
     List<Integer>  pila =  new ArrayList<>();
+    Conversions conversions = new Conversions();
 
     private Data Fptr = null;
     private Data Eptr = null;
@@ -94,6 +95,7 @@ public class TercetoGenerator {
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(s));
         aux.setField1(new Data("["+((Integer)(indexTerceto-1)).toString()+"]", ((Integer)Constants.PUN_TERCETO).toString()));
+        aux.setType(String.valueOf(Constants.BRANCH));
         pila.add(indexTerceto);
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
@@ -106,6 +108,7 @@ public class TercetoGenerator {
         aux.setOperator(new Data(s));
         aux.setField1(new Data("["+((Integer)(indexTerceto-1)).toString() + "]"));
         aux.setField2(new Data("[" + indexDO + "]", ((Integer) Constants.PUN_TERCETO).toString()));
+
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
     }
@@ -129,8 +132,26 @@ public class TercetoGenerator {
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
-        aux.setField1(this.lastDeclaration(field1));
-        aux.setField2(this.lastDeclaration(field2));
+        Data aux1, aux2;
+        if(operator.equals("="))
+            aux1 = field1;
+        else
+            aux1 = this.lastDeclaration(field1);
+        if(field2.getCode() == Constants.ID)
+            aux2 = this.lastDeclaration(field2);
+        else
+            aux2 = field2;
+        int typeTerceto1 = whatType(aux1);
+        int typeTerceto2 = whatType(aux2);
+
+        int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
+        if( type == -1)
+            System.out.println("Terceto: "+indexTerceto+" Incompatibilidad de tipos: "+typeTerceto1+ " y "+typeTerceto2);
+        else {
+            aux.setType(String.valueOf(type));
+        }
+        aux.setField1(aux1);
+        aux.setField2(aux2);
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
@@ -141,7 +162,6 @@ public class TercetoGenerator {
      * Si es una CTE devuelve la misma
      * De lo contrario solo devueelve una referencia al terceto anterior*/
     public Data lastDeclaration(Data field){
-        System.out.println("Entra con: "+field.toString());
         if(field.getCode() == Constants.ID) {
             for (int i = tercetos.size(); i > 0; i--) {
                 if (tercetos.get(i).getField1().getLexema().equals(field.getLexema())
@@ -154,9 +174,25 @@ public class TercetoGenerator {
             return field;
         return new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO));
     }
+    private int whatType(Data field){
+        if(!field.getLexema().equals("BF") && !field.getLexema().equals("BI")) {
+            int type = 0;
+            int index;
+            Data aux;
+            if (Integer.valueOf(field.getType()) == Constants.PUN_TERCETO) {
+                index = Integer.valueOf(field.getLexema().substring(1, field.getLexema().length() - 1));
+                if (tercetos.get(index).getType() == null)
+                    return -1;
+                else {
+                    type = Integer.valueOf(tercetos.get(index).getType());
+                    return type;
+                }
+            }
+        }
+        return Integer.valueOf(field.getType());
+    }
 
     public void showTercetos(){
-
         System.out.println("*******************");
         System.out.println("Tercetos generados:");
         System.out.println("*******************");

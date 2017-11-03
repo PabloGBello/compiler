@@ -77,6 +77,7 @@ public class Terceto {
             aux = aux + field2.getLexema() + ")";
         else
             aux += "  )";
-        return aux;
+        return aux + "- type: "+type;
     }
+
 }

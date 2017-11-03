@@ -4,6 +4,7 @@ import base.Printer;
 import base.SymbolTable;
 import base.Values;
 import base.Constants;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class AS10 extends SemanticAction {
         }
 
         if (st.getKey(lex) == -1){
-            st.addConstant(Constants.CTE, lex, "INT");
+            st.addConstant(Constants.CTE, lex, String.valueOf(Constants.INT));
         }
 
         aux.add(st.getKey(lex));
