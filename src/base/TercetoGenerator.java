@@ -14,6 +14,7 @@ public class TercetoGenerator {
     int flagOpAnt  = -1;
     List<Integer>  pila =  new ArrayList<>();
     Conversions conversions = new Conversions();
+    int numberVarAux = 1;
 
     private Data Fptr = null;
     private Data Eptr = null;
@@ -26,6 +27,12 @@ public class TercetoGenerator {
     /* Variables necesarias para identificar el primer terceto de un bloque - usado para DO UNTIL*/
     private int indexPrimerSentBloque = 0;
     private boolean primerSentBloque = false;
+
+    public int getNumberVarAux(){
+        int result = numberVarAux;
+        numberVarAux++;
+        return result;
+    }
 
     public Data getFptr() {
         return Fptr;
@@ -130,6 +137,7 @@ public class TercetoGenerator {
             indexPrimerSentBloque = indexTerceto;
         }
         Terceto aux = new Terceto();
+
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
@@ -141,6 +149,7 @@ public class TercetoGenerator {
             aux2 = this.lastDeclaration(field2);
         else
             aux2 = field2;
+
         int typeTerceto1 = whatType(aux1);
         int typeTerceto2 = whatType(aux2);
 
