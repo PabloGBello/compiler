@@ -10,7 +10,7 @@ package base;
 public class Terceto {
     int index;
     String type;
-    Data field1, field2, operator,aux;
+    Data field1, field2, operator,varAux;
 
     public Terceto() {
         index = -1;
@@ -18,7 +18,7 @@ public class Terceto {
         this.field1 = null;
         this.field2 = null;
         this.type = null;
-        this.aux = null;
+        this.varAux = null;
     }
 
     public Terceto(int indexTerceto, Data op, Data field1, Data field2, String type) {
@@ -27,16 +27,26 @@ public class Terceto {
         this.field1 = field1;
         this.field2 = field2;
         this.type = type;
-        this.aux = null;
-        aux.setLexema("aux" + indexTerceto);
+        this.varAux = null;
+    }
+
+    public Data getVarAux(){
+        return varAux;
+    }
+
+    public void setVarAux(Data data){
+        this.varAux = data;
     }
 
     public int getIndex(){
         return index;
     }
+
     public void setIndex(int indexTerceto){
+
         index = indexTerceto;
-        aux.setLexema("aux" + indexTerceto);
+       /* varAux = new Data();
+        varAux.setLexema("aux" + indexTerceto);*/
     }
     public Data getOperator() {
         return operator;
@@ -68,7 +78,7 @@ public class Terceto {
 
     public void setType(String type) {
         this.type = type;
-        this.aux.setType(type);
+        //this.varAux.setType(type);
     }
     public String toString(){
         String aux = "" + index+"-(";

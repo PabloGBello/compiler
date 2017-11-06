@@ -398,11 +398,22 @@ final static String yyrule[] = {
 
 LexicalAnalizer la;
 TercetoGenerator tg;
+AssemblerGenerator ag;
 ArrayList<String> aDeclarar = new ArrayList();
 
 public Parser(String dir) {
+
   la = new LexicalAnalizer(dir);
   tg = new TercetoGenerator();
+  ag = new AssemblerGenerator();
+}
+
+public TercetoGenerator getTg(){
+    return tg;
+}
+
+public AssemblerGenerator getAg(){
+    return ag;
 }
 
 public static void main(String[] args) {
@@ -412,6 +423,10 @@ public static void main(String[] args) {
 
     parser.getLa().outputST();
     parser.getLa().getCompilationOutput().closeWriter();
+
+    AssemblerGenerator ag = parser.getAg();
+    ag.setTercetos(parser.getTg().getTercetos());
+    ag.generate();
 }
 
 private int yylex(){
@@ -435,8 +450,6 @@ public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         tab.addSymbol(Integer.valueOf(CTE), String.valueOf(value));
 }
 
-
-
 public void declarar(String type){
     SymbolTable tab = la.getSymbolTable();
     for (String s : aDeclarar){
@@ -451,7 +464,7 @@ public LexicalAnalizer getLa() {
     return la;
 }
 
-//#line 383 "Parser.java"
+//#line 396 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -715,7 +728,7 @@ case 51:
 
                                                                           tg.setFptr((Data)val_peek(0).obj);}
 break;
-//#line 642 "Parser.java"
+//#line 655 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

@@ -14,7 +14,6 @@ public class TercetoGenerator {
     int flagOpAnt  = -1;
     List<Integer>  pila =  new ArrayList<>();
     Conversions conversions = new Conversions();
-    int numberVarAux = 1;
 
     private Data Fptr = null;
     private Data Eptr = null;
@@ -28,10 +27,8 @@ public class TercetoGenerator {
     private int indexPrimerSentBloque = 0;
     private boolean primerSentBloque = false;
 
-    public int getNumberVarAux(){
-        int result = numberVarAux;
-        numberVarAux++;
-        return result;
+    public Hashtable<Integer,Terceto> getTercetos(){
+        return tercetos;
     }
 
     public Data getFptr() {
@@ -136,6 +133,7 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
+
         Terceto aux = new Terceto();
 
         aux.setIndex(indexTerceto);
@@ -162,6 +160,8 @@ public class TercetoGenerator {
         aux.setField1(aux1);
         aux.setField2(aux2);
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
+
+        aux.setVarAux(new Data("aux"+aux.getIndex(),aux.getType()));
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
         return data;

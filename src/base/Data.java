@@ -6,6 +6,7 @@ package base;
  */
 
 public class Data {
+
     int codigo;
     private String lexema, type;
 
