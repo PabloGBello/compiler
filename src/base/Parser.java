@@ -404,7 +404,7 @@ ArrayList<String> aDeclarar = new ArrayList();
 public Parser(String dir) {
 
   la = new LexicalAnalizer(dir);
-  tg = new TercetoGenerator();
+  tg = new TercetoGenerator(la.getSymbolTable());
   ag = new AssemblerGenerator();
 }
 
@@ -416,7 +416,8 @@ public AssemblerGenerator getAg(){
     return ag;
 }
 
-public static void main(String[] args) {
+public static void main(String[] args){
+
     Parser parser = new Parser(args[0]);
     int parsedValue = parser.yyparse();
     System.out.println(parsedValue);
@@ -426,10 +427,11 @@ public static void main(String[] args) {
 
     AssemblerGenerator ag = parser.getAg();
     ag.setTercetos(parser.getTg().getTercetos());
-    ag.generate();
+    //ag.generate();
 }
 
 private int yylex(){
+
 	int token = la.yylex();
     yylval = new ParserVal(la.val);
     return token;

@@ -40,7 +40,7 @@ public class AS11 extends SemanticAction {
 
             if (st.getKey(lex) == -1){
 
-                st.addConstant(Constants.CTE, lex, String.valueOf(Constants.FLOAT));
+                st.addItem(Constants.CTE, lex, String.valueOf(Constants.FLOAT));
             }
 
             aux.add(st.getKey(lex));

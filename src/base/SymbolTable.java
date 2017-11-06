@@ -54,12 +54,12 @@ public class SymbolTable {
         simbolos.get(key).add(data);
     }
 
-    public void addConstant(Integer key, String value, String type){
+    public void addItem(Integer key, String value, String type){
 
         if (!simbolos.containsKey(key))
             simbolos.put(key, new ArrayList<Data>());
         Data data = new Data(value, String.valueOf(type));
-        data.setCode(Constants.CTE);
+        data.setCode(key);
         simbolos.get(key).add(data);
     }
 

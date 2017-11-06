@@ -23,6 +23,8 @@ public class TercetoGenerator {
     private Data IDptr = null;
     private int indexDO = -1;
 
+    private SymbolTable ST;
+
     /* Variables necesarias para identificar el primer terceto de un bloque - usado para DO UNTIL*/
     private int indexPrimerSentBloque = 0;
     private boolean primerSentBloque = false;
@@ -79,8 +81,9 @@ public class TercetoGenerator {
         IDptr = idptr;
     }
 
-    public TercetoGenerator(){
+    public TercetoGenerator(SymbolTable ST){
         tercetos = new Hashtable<>();
+        this.ST = ST;
     }
 
     public List<Integer> getPila() {
@@ -161,7 +164,12 @@ public class TercetoGenerator {
         aux.setField2(aux2);
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
 
-        aux.setVarAux(new Data("aux"+aux.getIndex(),aux.getType()));
+        // Variable auxiliar asociada a cada terceto.
+        aux.setVarAux(new Data("aux" + aux.getIndex(),aux.getType()));
+
+        // Se añade la variable auxiliar a la tabla de simbolos.
+        ST.addItem(Constants.ID,"aux" + aux.getIndex(),aux.getType());
+
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
         return data;

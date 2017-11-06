@@ -35,7 +35,7 @@ public class AS10 extends SemanticAction {
         }
 
         if (st.getKey(lex) == -1){
-            st.addConstant(Constants.CTE, lex, String.valueOf(Constants.INT));
+            st.addItem(Constants.CTE, lex, String.valueOf(Constants.INT));
         }
 
         aux.add(st.getKey(lex));

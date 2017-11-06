@@ -11,74 +11,73 @@ public class AssemblerGenerator {
     }
 
     public AssemblerGenerator(){
-
         tercetos = null;
     }
 
     public void setTercetos(Hashtable<Integer,Terceto> tercetos){
-        
         this.tercetos = tercetos;
     }
 
     public void generate(){
 
-        for (Integer index = 1; index <= tercetos.keySet().size(); index++) {
+        for (Integer index = 1; index <= tercetos.keySet().size(); index++){
 
             Terceto terceto = tercetos.get(index);
-            System.out.println("operador : " + terceto.getOperator().getLexema());
-            System.out.println("Field 1 : " + terceto.getField1().getLexema());
-            System.out.println("Field 2 : " + terceto.getField2().getLexema());
-            System.out.println("var aux : " + terceto.getVarAux().getLexema());
+            String codeAssembler = "";
 
-            /*if ((terceto.getField2().getType() != null) && (terceto.getField2().getType().equals(((Integer) Constants.PUN_TERCETO).toString()))){
-
-                System.out.println("MOV" + " R1" + ",_" + terceto.getField1().getLexema());
-                String aux = terceto.getField2().getLexema();
-                aux = aux.substring(1,aux.length()-1);
-                int pos = Integer.valueOf(aux);
-                System.out.println(getOperation(terceto.getOperator().getLexema()) + " R1" + "," + variablesAuxs.get(pos-1));
-                System.out.println("MOV " + variablesAuxs.get(numberVarAux-1)+ ",R1");
+            switch(terceto.getOperator().getLexema()){
+                case "*":
+                    codeAssembler = generateMult(terceto);
+                    break;
+                case "+":
+                    //codeAssembler = generateAdd(terceto);
+                    break;
+                case "/":
+                    //codeAssembler = generateDiv(terceto);
+                    break;
+                case "-":
+                    //codeAssembler = generateSub(terceto);
+                    break;
+                case "=":
+                    //codeAssembler = generateAsig(terceto);
+                    break;
+                default:
+                    //codeAssembler = "";
+                    break;
             }
-            else {
-
-                System.out.println("MOV" + " R1" + ",_" + terceto.getField1().getLexema());
-                System.out.println(getOperation(terceto.getOperator().getLexema()) + " R1" + ",_" + terceto.getField2().getLexema());
-                System.out.println("MOV " + variablesAuxs.get(numberVarAux-1)+ ",R1");
-            }*/
+            System.out.println(codeAssembler); // Aca iria el write al buffer del archivo.
         }
     }
 
     public String generateMult(Terceto terceto){
+        String result = "";
 
-        return null;
-    }
-
-    public String getOperation(String op){
-
-        String result = null;
-        switch(op){
-
-            case "*":
-                result = "MUL";
-                break;
-            case "+":
-                result = "ADD";
-                break;
-            case "/":
-                result = "DIV";
-                break;
-            case "-":
-                result = "SUB";
-                break;
-            case "=":
-                result = "MOV";
-                break;
-            default:
-                result = "";
-                break;
+        if (getCase(terceto) == 4) {
+            result = "MOV EAX,_" + terceto.getField1().getLexema() + "\r\n";
+            result += "MUL EAX,_" + terceto.getField2().getLexema() + "\r\n";
+            result += "MOV @" + terceto.getVarAux().getLexema() + ",EAX";
         }
 
+        // faltan los demas casos
         return result;
     }
 
+    // Informa que tipo de campos tiene un terceto.
+    public int getCase(Terceto terceto){
+
+        // caso 1 : field1 como puntero a terceto
+        if ((terceto.getField1().getType() != null) && (terceto.getField1().getType().equals(((Integer) Constants.PUN_TERCETO).toString())))
+            return 1;
+        else
+            // caso 2 : field2 como puntero a terceto
+            if ((terceto.getField2().getType() != null) && (terceto.getField2().getType().equals(((Integer) Constants.PUN_TERCETO).toString())))
+                return 2;
+            else
+                //caso 3 : field1 y field2 punteros a tercetos
+                if ((terceto.getField2().getType() != null) && (terceto.getField1().getType() != null) && (terceto.getField2().getType().equals(((Integer) Constants.PUN_TERCETO).toString())) && (terceto.getField1().getType().equals(((Integer) Constants.PUN_TERCETO).toString())))
+                    return 3;
+                else
+                    // caso 4 : field1 o field2 con variables o constantes
+                    return 4;
+    }
 }
