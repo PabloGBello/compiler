@@ -5,14 +5,14 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class SymbolTable {
-    private Hashtable<Integer,List<Data>> simbolos;
+    private Hashtable<Integer, List<Data>> simbolos;
     private FileHandler compilationOutput;
 
     /**
      * Constructor carga la TS con los simbolos necesarios
      **/
 
-    public SymbolTable(FileHandler handler){
+    public SymbolTable(FileHandler handler) {
 
         compilationOutput = handler;
 
@@ -21,45 +21,55 @@ public class SymbolTable {
         simbolos.put(Constants.ID, new ArrayList()); //ID
         simbolos.put(Constants.CADENA, new ArrayList()); //STRING
 
-        addSymbol(Constants.IF,"IF");
-        addSymbol(Constants.THEN,"THEN");
-        addSymbol(Constants.ELSE,"ELSE");
-        addSymbol(Constants.END_IF,"END_IF");
-        addSymbol(Constants.BEGIN,"BEGIN");
-        addSymbol(Constants.END,"END");
-        addSymbol(Constants.OUT,"OUT");
-        addSymbol(Constants.DO,"DO");
-        addSymbol(Constants.UNTIL,"UNTIL");
-        addSymbol(Constants.LET,"LET");
+        addSymbol(Constants.IF, "IF");
+        addSymbol(Constants.THEN, "THEN");
+        addSymbol(Constants.ELSE, "ELSE");
+        addSymbol(Constants.END_IF, "END_IF");
+        addSymbol(Constants.BEGIN, "BEGIN");
+        addSymbol(Constants.END, "END");
+        addSymbol(Constants.OUT, "OUT");
+        addSymbol(Constants.DO, "DO");
+        addSymbol(Constants.UNTIL, "UNTIL");
+        addSymbol(Constants.LET, "LET");
 
-        addSymbol(Constants.INT,"INT");
-        addSymbol(Constants.FLOAT,"FLOAT");
+        addSymbol(Constants.INT, "INT");
+        addSymbol(Constants.FLOAT, "FLOAT");
 
-        addSymbol(Constants.COMP_MAYOR_IGUAL,">=");
-        addSymbol(Constants.COMP_MENOR_IGUAL,"<=");
-        addSymbol(Constants.COMP_IGUAL_IGUAL,"==");
-        addSymbol(Constants.COMP_DISTINTO,"<>");
+        addSymbol(Constants.COMP_MAYOR_IGUAL, ">=");
+        addSymbol(Constants.COMP_MENOR_IGUAL, "<=");
+        addSymbol(Constants.COMP_IGUAL_IGUAL, "==");
+        addSymbol(Constants.COMP_DISTINTO, "<>");
 
-        addSymbol(Constants.I_F,"I_F");
+        addSymbol(Constants.I_F, "I_F");
     }
 
 
-    public void addSymbol(Integer key, String value){
+    public void addSymbol(Integer key, String value) {
 
         if (!simbolos.containsKey(key))
-            simbolos.put(key, new ArrayList<Data>());
+            simbolos.put(key, new ArrayList());
 
         Data data = new Data(value);
         data.setCode(key);
         simbolos.get(key).add(data);
     }
 
-    public void addItem(Integer key, String value, String type){
-
+    public void addItem(Integer key, String value, String type) {
         if (!simbolos.containsKey(key))
-            simbolos.put(key, new ArrayList<Data>());
+            simbolos.put(key, new ArrayList());
         Data data = new Data(value, String.valueOf(type));
         data.setCode(key);
+        simbolos.get(key).add(data);
+    }
+
+    public void addSymbol(Integer key, String value, String type, int numero) {
+        if (!simbolos.containsKey(key))
+            simbolos.put(key, new ArrayList());
+
+        Data data = new Data(value, String.valueOf(type));
+        data.setCode(key);
+        data.setNumero(numero);
+
         simbolos.get(key).add(data);
     }
 
@@ -82,12 +92,13 @@ public class SymbolTable {
 
     /**
      * Obtiene el identificador para un token dado
+     *
      * @param value token
      * @return -1 si el token no existe en la tabla de simbolos
      */
-    public Integer getKey(String value){
+    public Integer getKey(String value) {
 
-        for(Integer i : simbolos.keySet()) {
+        for (Integer i : simbolos.keySet()) {
             for (Data d : simbolos.get(i)) {
                 if (d.getLexema().equals(value))
                     return i;
@@ -96,9 +107,9 @@ public class SymbolTable {
         return -1;
     }
 
-    public String getSymbol(Integer key, int position){
-        if(simbolos.containsKey(key)){
-            if(simbolos.get(key).size()>=position) {
+    public String getSymbol(Integer key, int position) {
+        if (simbolos.containsKey(key)) {
+            if (simbolos.get(key).size() >= position) {
                 return simbolos.get(key).get(position).getLexema();
 
             }
@@ -106,6 +117,7 @@ public class SymbolTable {
         return null;
     }
 
+    /*
     public void setType(String lex, String type){
 
         List<Data> aux = simbolos.get(Constants.ID);
@@ -120,11 +132,53 @@ public class SymbolTable {
             }
         }
     }
+    */
 
-    public Integer getPosition (String value){
+    public void setType(String lex, String type) {
+
+        List<Data> lista = simbolos.get(Constants.ID);
+
+        int i = lista.size() - 1;
+        boolean stop = false;
+
+        //Recorro la lista de IDs de atras hacia adelante
+        while (i >= 0 && !stop) {
+
+            Data item = lista.get(i);
+            String lexema = item.getLexema();
+
+            // Coincide lexema: es la misma variable
+            if (lexema.equals(lex)) {
+                stop = true;
+
+                if (item.getType() == null) {
+                    //Variable no fue declarada
+                    item.setType(this.getType(type));
+                    item.setNumero(0);
+                }
+                else {
+                    //Variable existe
+
+                    if (item.getType().equals(this.getType(type))) {
+                        //Variable en T.S. == tipo que la variable proxima a declarar: ERROR!
+                        System.out.println("ERROR!!!! dos variables adyacentes declaradas con mismo tipo. Chau");
+                        System.exit(1);
+                    }
+                    else {
+                        //Variable en T.S. <> tipo que la variable proxima a declarar: SHADOWING
+                        this.addSymbol(Constants.ID, lex, type, item.getNumero() + 1);
+                    }
+
+                }
+            }
+            i--;
+        }
+    }
+
+    public Integer getPosition(String value) {
 
         List<Data> list = simbolos.get(getKey(value));
-        for(int i = 0; i < list.size(); i++)
+        for (int i = 0; i < list.size(); i++)
             if (value.equals(list.get(i).getLexema()))
                 return i;
         return -1;
@@ -134,29 +188,32 @@ public class SymbolTable {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
-    private boolean isString(String s){
-        if ((s.charAt(0) == '"') && (s.charAt(s.length()-1) == '"'))
+    private boolean isString(String s) {
+        if ((s.charAt(0) == '"') && (s.charAt(s.length() - 1) == '"'))
             return true;
         return false;
     }
 
-    public void showAll (){
+    public void showAll() {
 
-        for(Integer i : simbolos.keySet())
+        for (Integer i : simbolos.keySet())
             for (Data s : simbolos.get(i))
-                System.out.println(i +  " : " + s.getLexema());
+                System.out.println(i + " : " + s.getLexema());
     }
 
     public Hashtable<Integer, List<Data>> getSimbolos() {
         return simbolos;
     }
-    /**Para extraer la estructura completa Data.
-     * CAPAZ QUE SE PARECE A OTRO METODO CON +- FUNCIONALIDAD PERO SE
-     * REFINA A LO ULTIMO TODO ES NECESARIO*/
 
-    public Data getData(int key, int pos){
-        if(simbolos.containsKey(key)){
-            if(simbolos.get(key).size()>=pos) {
+    /**
+     * Para extraer la estructura completa Data.
+     * CAPAZ QUE SE PARECE A OTRO METODO CON +- FUNCIONALIDAD PERO SE
+     * REFINA A LO ULTIMO TODO ES NECESARIO
+     */
+
+    public Data getData(int key, int pos) {
+        if (simbolos.containsKey(key)) {
+            if (simbolos.get(key).size() >= pos) {
                 return simbolos.get(key).get(pos);
 
             }
@@ -164,7 +221,18 @@ public class SymbolTable {
         return null;
     }
 
-    public FileHandler getCompilationOutput(){
+    public FileHandler getCompilationOutput() {
         return compilationOutput;
+    }
+
+    // Para no andar reiterando arriba en el setType
+    private String getType(String type) {
+        if (type.equals("INT"))
+            return String.valueOf(Constants.INT);
+        if (type.equals("FLOAT"))
+            return String.valueOf(Constants.FLOAT);
+        if (type.equals("STRING"))
+            return String.valueOf(Constants.CADENA);
+        return null;
     }
 }

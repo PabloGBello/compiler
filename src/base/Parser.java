@@ -404,7 +404,7 @@ ArrayList<String> aDeclarar = new ArrayList();
 public Parser(String dir) {
 
   la = new LexicalAnalizer(dir);
-  tg = new TercetoGenerator(la.getSymbolTable());
+  tg = new TercetoGenerator(la.ST);
   ag = new AssemblerGenerator();
 }
 
@@ -416,8 +416,7 @@ public AssemblerGenerator getAg(){
     return ag;
 }
 
-public static void main(String[] args){
-
+public static void main(String[] args) {
     Parser parser = new Parser(args[0]);
     int parsedValue = parser.yyparse();
     System.out.println(parsedValue);
@@ -427,22 +426,23 @@ public static void main(String[] args){
 
     AssemblerGenerator ag = parser.getAg();
     ag.setTercetos(parser.getTg().getTercetos());
-    //ag.generate();
+    ag.generate();
 }
 
 private int yylex(){
-
 	int token = la.yylex();
     yylval = new ParserVal(la.val);
     return token;
 }
 
-private void yyerror(String mensaje){
-    if(!mensaje.contains("syntax error")){
+private void yyerror(String msj){
+}
+
+private void yynotify(int type, String mensaje){
         System.out.println(mensaje);
-        String s = Printer.getMessage(1,1, la.getValues().getCurrentLine(), mensaje); //v.currentLine
+        String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje);
         la.getCompilationOutput().write(s);
-    }
+    
 }
 
 public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
@@ -466,7 +466,7 @@ public LexicalAnalizer getLa() {
     return la;
 }
 
-//#line 396 "Parser.java"
+//#line 398 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -642,7 +642,7 @@ case 16:
 break;
 case 17:
 //#line 129 "gramatica.y"
-{yyerror("Estructura IF incorrecta");}
+{yynotify(1, "Estructura IF incorrecta");}
 break;
 case 18:
 //#line 135 "gramatica.y"
@@ -650,11 +650,11 @@ case 18:
 break;
 case 19:
 //#line 141 "gramatica.y"
-{yyerror("Estructura IF correcta.");}
+{yynotify(2, "Estructura IF correcta.");}
 break;
 case 20:
 //#line 143 "gramatica.y"
-{yyerror("Estructura IF correcta.");}
+{yynotify(2, "Estructura IF correcta.");}
 break;
 case 21:
 //#line 149 "gramatica.y"
@@ -668,7 +668,7 @@ case 23:
 break;
 case 31:
 //#line 191 "gramatica.y"
-{yyerror("Estructura UNTIL incorrecta.");}
+{yynotify(1, "Estructura UNTIL incorrecta.");}
 break;
 case 32:
 //#line 197 "gramatica.y"
@@ -678,7 +678,7 @@ case 33:
 //#line 203 "gramatica.y"
 {tg.tercetoIteration("BF");
 
-                                                                          yyerror("Estructura UNTIL correcta.");}
+                                                                          yynotify(2, "Estructura UNTIL correcta.");}
 break;
 case 35:
 //#line 221 "gramatica.y"
@@ -686,11 +686,11 @@ case 35:
 break;
 case 36:
 //#line 225 "gramatica.y"
-{yyerror("Asignacion incorrecta.");}
+{yynotify(1, "Asignacion incorrecta.");}
 break;
 case 38:
 //#line 233 "gramatica.y"
-{yyerror("Error en bloque.");}
+{yynotify(1, "Error en bloque.");}
 break;
 case 43:
 //#line 255 "gramatica.y"
@@ -730,7 +730,7 @@ case 51:
 
                                                                           tg.setFptr((Data)val_peek(0).obj);}
 break;
-//#line 655 "Parser.java"
+//#line 657 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
