@@ -9,6 +9,7 @@ public class Data {
 
     int codigo;
     private String lexema, type;
+    private Comparable value;
 
     public Data(){
 
@@ -22,6 +23,14 @@ public class Data {
     public Data(String lexema){
 
         this.lexema = lexema;
+    }
+
+    public void setValue(Comparable value) {
+        this.value = value;
+    }
+
+    public Comparable getValue() {
+        return value;
     }
 
     public String getLexema() {

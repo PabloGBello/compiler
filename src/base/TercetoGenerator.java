@@ -1,6 +1,9 @@
 package base;
 
 
+
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import java.util.*;
 
 public class TercetoGenerator {
@@ -106,6 +109,17 @@ public class TercetoGenerator {
         pila.add(indexTerceto);
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
+        System.out.println("index terceto "+indexTerceto);
+    }
+    public void tercetoLabel(){
+        Terceto aux = new Terceto();
+        aux.setIndex(indexTerceto);
+        aux.setOperator(new Data("Label"+indexTerceto,String.valueOf(Constants.BRANCH)));
+        aux.setField1(new Data("-"));
+        aux.setField2(new Data("-"));
+        aux.setType(String.valueOf(Constants.BRANCH));
+        tercetos.put(indexTerceto, aux);
+        indexTerceto++;
     }
 
     public void tercetoIteration(String s){
@@ -115,7 +129,7 @@ public class TercetoGenerator {
         aux.setOperator(new Data(s));
         aux.setField1(new Data("["+((Integer)(indexTerceto-1)).toString() + "]"));
         aux.setField2(new Data("[" + indexDO + "]", ((Integer) Constants.PUN_TERCETO).toString()));
-
+        aux.setType(String.valueOf(Constants.BRANCH));
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
     }
@@ -125,7 +139,7 @@ public class TercetoGenerator {
             tercetos.get(pila.remove(0)).setField2(new Data("["+((Integer)(indexTerceto+1)).toString()+"]", ((Integer)Constants.PUN_TERCETO).toString()));
         else {
             tercetos.get(pila.get(0)).setField1(new Data("["+((Integer) (indexTerceto)).toString()+"]", ((Integer) Constants.PUN_TERCETO).toString()));
-            tercetos.get(pila.remove(0)).setField2(new Data("-", ((Integer) Constants.PUN_TERCETO).toString()));
+            tercetos.get(pila.remove(0)).setField2(new Data("-", ((Integer) Constants.OTHER).toString()));
         }
     }
 
@@ -142,10 +156,14 @@ public class TercetoGenerator {
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
-        if(operator.equals("="))
+        if(operator.equals("=")) {
             aux1 = field1;
-        else
+            System.out.println("Crea terceto igual con: "+field1.getCode());
+        }
+        else {
             aux1 = this.lastDeclaration(field1);
+            System.out.println("Entra con*: "+field1+" "+field1.getCode());
+        }
         if(field2.getCode() == Constants.ID)
             aux2 = this.lastDeclaration(field2);
         else
@@ -153,7 +171,7 @@ public class TercetoGenerator {
 
         int typeTerceto1 = whatType(aux1);
         int typeTerceto2 = whatType(aux2);
-
+        System.out.println(typeTerceto1+"---"+typeTerceto2);
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
         if( type == -1)
             System.out.println("Terceto: "+indexTerceto+" Incompatibilidad de tipos: "+typeTerceto1+ " y "+typeTerceto2);
@@ -161,14 +179,16 @@ public class TercetoGenerator {
             aux.setType(String.valueOf(type));
         }
         aux.setField1(aux1);
+        System.out.println("guarda "+indexTerceto+" "+aux1.getCode());
         aux.setField2(aux2);
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
 
         // Variable auxiliar asociada a cada terceto.
-        aux.setVarAux(new Data("aux" + aux.getIndex(),aux.getType()));
+        Data info = new Data("@aux" + aux.getIndex(),aux.getType());
+        aux.setVarAux(info);
 
         // Se añade la variable auxiliar a la tabla de simbolos.
-        ST.addItem(Constants.ID,"aux" + aux.getIndex(),aux.getType());
+        ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
 
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
@@ -183,11 +203,13 @@ public class TercetoGenerator {
             for (int i = tercetos.size(); i > 0; i--) {
                 if (tercetos.get(i).getField1().getLexema().equals(field.getLexema())
                         && tercetos.get(i).getOperator().getLexema().equals("=")){
-                    return new Data("[" + String.valueOf(i) + "]", String.valueOf(Constants.PUN_TERCETO));
+                    Data aux = new Data("[" + String.valueOf(i) + "]", String.valueOf(Constants.PUN_TERCETO));
+                    aux.setCode(Constants.PUN_TERCETO);
+                    return aux;
                 }
             }
         }
-        if(field.getCode() == Constants.CTE || field.getCode() == Constants.ID)
+        if(field.getCode() == Constants.CTE || field.getCode() == Constants.PUN_TERCETO)
             return field;
         return new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO));
     }

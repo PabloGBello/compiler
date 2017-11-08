@@ -56,6 +56,4 @@ public class Tools {
         else
             return "c";
     }
-
-
 }

@@ -25,6 +25,7 @@ public class Constants {
 
     public static final int BRANCH=298;
     public static final int PUN_TERCETO=299;
+    public static final int OTHER = 300;
 
 
 

@@ -80,6 +80,11 @@ public class Conversions {
         matrices.put("+", suma);
         matrices.put("=", asignacion);
         matrices.put("==", comparacion);
+        matrices.put(">", comparacion);
+        matrices.put("<", comparacion);
+        matrices.put(">=", comparacion);
+        matrices.put("<=", comparacion);
+        matrices.put("<>", comparacion);
         matrices.put("-", resta);
         matrices.put("*", producto);
         matrices.put("/", division);

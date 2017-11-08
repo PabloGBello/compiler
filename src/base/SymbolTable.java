@@ -55,11 +55,32 @@ public class SymbolTable {
     }
 
     public void addItem(Integer key, String value, String type){
-
         if (!simbolos.containsKey(key))
             simbolos.put(key, new ArrayList<Data>());
         Data data = new Data(value, String.valueOf(type));
         data.setCode(key);
+
+        if (key.equals(Constants.CTE)) {
+            // Se le asigna el valor al atributo value para cada constante.
+            if (Integer.valueOf(type).equals(Constants.INT))
+                data.setValue(Integer.valueOf(value));
+            else if (Integer.valueOf(type).equals(Constants.FLOAT)) {
+
+                float result;
+                String aux = value.replace(',', '.');
+
+                if (aux.contains("E")) {
+                    float num = Float.valueOf(aux.substring(0, aux.indexOf('E')));
+                    float exp = Float.valueOf(aux.substring(aux.indexOf('E') + 1));
+                    String aux2 = String.valueOf(Math.pow(num, exp));
+                    result = Float.valueOf(aux2);
+                } else
+                    result = Float.valueOf(aux);
+
+                data.setValue(result);
+
+            }
+        }
         simbolos.get(key).add(data);
     }
 

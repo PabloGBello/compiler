@@ -124,7 +124,8 @@ ejecutable : seleccion
 
 
 
-seleccion : IF '(' cond_if ')' cpo_if                                   {tg.tercetoDesapilar(0);}
+seleccion : IF '(' cond_if ')' cpo_if                                   {tg.tercetoDesapilar(0);
+                                                                        tg.tercetoLabel();}
 
           | IF error END_IF                                             {yyerror("Estructura IF incorrecta");}
 
@@ -148,7 +149,8 @@ cpo_if : THEN cpo_then ELSE cpo_else END_IF                             {yyerror
 
 cpo_then : bloque                                                       {tg.tercetoDesapilar(1);
 
-                                                                        tg.tercetoIncompleto("BI");}
+                                                                        tg.tercetoIncompleto("BI");
+                                                                        tg.tercetoLabel();}
 
 ;
 
@@ -194,7 +196,8 @@ iteracion : DO_IND cpo_until
 
 
 
-DO_IND    : DO                                                            {tg.setIndexDO();}
+DO_IND    : DO                                                            {tg.setIndexDO();
+                                                                          tg.tercetoLabel();}
 
 ;
 
@@ -290,22 +293,16 @@ factor : ID                                                               {tg.se
 
 LexicalAnalizer la;
 TercetoGenerator tg;
-AssemblerGenerator ag;
 ArrayList<String> aDeclarar = new ArrayList();
 
 public Parser(String dir) {
 
   la = new LexicalAnalizer(dir);
-  tg = new TercetoGenerator();
-  ag = new AssemblerGenerator();
+  tg = new TercetoGenerator(la.getSymbolTable());
 }
 
 public TercetoGenerator getTg(){
     return tg;
-}
-
-public AssemblerGenerator getAg(){
-    return ag;
 }
 
 public static void main(String[] args) {
@@ -316,7 +313,7 @@ public static void main(String[] args) {
     parser.getLa().outputST();
     parser.getLa().getCompilationOutput().closeWriter();
 
-    AssemblerGenerator ag = parser.getAg();
+    AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);
     ag.setTercetos(parser.getTg().getTercetos());
     ag.generate();
 }
