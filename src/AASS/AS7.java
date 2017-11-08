@@ -23,7 +23,7 @@ public class AS7 extends SemanticAction {
         v.addCharToBuffer(c);
 
         String lex = v.getBuffer();
-
+        super.addToken(lex);
         aux.add(st.getKey(lex));
         aux.add(st.getPosition(lex));
         return aux;

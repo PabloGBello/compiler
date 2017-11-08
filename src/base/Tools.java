@@ -9,6 +9,7 @@ public class Tools {
      *  La letra (E) o (e) se trata aparte porque se utiliza como exponente en flotantes
      *  ...etc.
     */
+
     public static String translate(Character s){
 
         if(Character.isDigit(s))

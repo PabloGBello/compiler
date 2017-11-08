@@ -418,6 +418,7 @@ public static void main(String[] args) {
 
     parser.getLa().outputST();
     parser.getLa().getCompilationOutput().closeWriter();
+    LexicalAnalizer.detectedTokens.closeWriter();
 
     // Generacion de codigo assembler
     AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);

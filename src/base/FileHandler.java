@@ -88,7 +88,7 @@ public class FileHandler {
             for(Integer i : ST.getSimbolos().keySet()) {
                 writer.write(i + ": ");
                 for (Data d : ST.getSimbolos().get(i)) {
-                    writer.write(d.getLexema());
+                    writer.write(d.getLexema()+" ");
                 }
                 writer.write(" \r\n");
             }

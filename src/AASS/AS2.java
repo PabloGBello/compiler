@@ -20,6 +20,7 @@ public class AS2 extends SemanticAction {
     public List<Integer> execute(String c) {
 
         List<Integer> aux = new ArrayList();
+        super.addToken(c);
         aux.add((int)c.charAt(0));
         aux.add(null);
 

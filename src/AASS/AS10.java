@@ -25,6 +25,8 @@ public class AS10 extends SemanticAction {
 
         List<Integer> aux = new ArrayList();
         String lex = v.getBuffer();
+
+        super.addToken(lex);
         v.subI();
 
         Integer intVal = Integer.parseInt(lex);

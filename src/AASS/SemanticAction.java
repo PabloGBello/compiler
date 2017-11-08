@@ -1,5 +1,6 @@
 package AASS;
 
+import base.LexicalAnalizer;
 import base.SymbolTable;
 import base.Values;
 
@@ -13,6 +14,10 @@ public abstract class SemanticAction {
     public SemanticAction(SymbolTable st, Values v){
         this.st = st;
         this.v = v;
+    }
+
+    public void addToken(String token){
+        LexicalAnalizer.detectedTokens.write(token);
     }
 
     public abstract List<Integer> execute(String c);

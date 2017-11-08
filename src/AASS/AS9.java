@@ -26,6 +26,8 @@ public class AS9 extends SemanticAction {
 
         String lex = v.getBuffer();
 
+        super.addToken(lex);
+
         if (st.getKey(lex) == -1){
             st.addSymbol(Constants.CADENA, lex);
         }

@@ -16,6 +16,8 @@ public class LexicalAnalizer {
     private ArrayList<Character> code;
     private List<Integer> token = new ArrayList();
 
+    public static FileHandler detectedTokens;
+
     public Data val;
 
     private FileHandler compilationOutput, STOutput;
@@ -38,6 +40,8 @@ public class LexicalAnalizer {
         // CREAMOS LA TABLA DE SIMBOLOS
         ST = new SymbolTable(compilationOutput);
 
+        detectedTokens = new FileHandler(1, dir, "tokensDetectados.txt");
+
         // CARGAMOS TRANSICIONES Y A.S.
         this.loadStates();
         this.loadActions();
@@ -59,13 +63,9 @@ public class LexicalAnalizer {
             if(SA.get(currState, currItem) != null){
                 token = ((SemanticAction)SA.get(currState, currItem)).execute(code.get(values.getI()).toString());
             }
-
             values.addI();
-
         }
-
         values.setState(0);
-
         return token;
     }
 

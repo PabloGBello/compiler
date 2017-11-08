@@ -26,6 +26,8 @@ public class AS1 extends SemanticAction {
         List<Integer> aux = new ArrayList();
 
         String lex = v.getBuffer();
+
+        super.addToken(lex);
         v.subI();
 
         if (st.getKey(lex) == -1){

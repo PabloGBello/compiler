@@ -24,6 +24,7 @@ public class AS11 extends SemanticAction {
 
         List<Integer> aux = new ArrayList();
         String lex = v.getBuffer();
+        super.addToken(lex);
         v.subI();
 
         if (lex.trim().equals(",")){

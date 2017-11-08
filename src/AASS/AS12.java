@@ -24,6 +24,7 @@ public class AS12 extends SemanticAction {
 
         List<Integer> aux = new ArrayList();
         String lex = v.getBuffer();
+        super.addToken(lex);
         v.subI();
 
         Float inf = Float.valueOf("1.17549435E-38");

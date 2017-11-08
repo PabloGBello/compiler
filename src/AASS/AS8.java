@@ -20,6 +20,7 @@ public class AS8 extends SemanticAction {
 
         List<Integer> aux = new ArrayList();
         v.subI();
+        super.addToken(v.getBuffer());
         aux.add((int)v.getBuffer().charAt(0));
         aux.add(null);
 
