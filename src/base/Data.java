@@ -7,22 +7,22 @@ package base;
 
 public class Data {
 
-    int codigo;
+    private int codigo, numero;
     private String lexema, type;
     private Comparable value;
 
     public Data(){
-
-    }
-    public Data(String lexema, String type){
-
-        this.lexema = lexema;
-        this.type = type;
     }
 
     public Data(String lexema){
-
         this.lexema = lexema;
+        numero = 0;
+    }
+
+    public Data(String lexema, String type){
+        this.lexema = lexema;
+        this.type = type;
+        numero = 0;
     }
 
     public void setValue(Comparable value) {
@@ -49,6 +49,14 @@ public class Data {
         this.type = type;
     }
 
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
     public int getCode() {
         return codigo;
     }
@@ -56,6 +64,7 @@ public class Data {
     public void setCode(int code) {
         this.codigo = code;
     }
+
     public String toString(){
         return "["+lexema+","+type+"]";
     }
