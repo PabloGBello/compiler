@@ -215,16 +215,13 @@ public class TercetoGenerator {
     }
     private int whatType(Data field){
         if(!field.getLexema().equals("BF") && !field.getLexema().equals("BI")) {
-            int type = 0;
             int index;
-            Data aux;
             if (Integer.valueOf(field.getType()) == Constants.PUN_TERCETO) {
                 index = Integer.valueOf(field.getLexema().substring(1, field.getLexema().length() - 1));
                 if (tercetos.get(index).getType() == null)
                     return -1;
                 else {
-                    type = Integer.valueOf(tercetos.get(index).getType());
-                    return type;
+                    return Integer.valueOf(tercetos.get(index).getType());
                 }
             }
         }

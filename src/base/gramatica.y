@@ -127,7 +127,7 @@ ejecutable : seleccion
 seleccion : IF '(' cond_if ')' cpo_if                                   {tg.tercetoDesapilar(0);
                                                                         tg.tercetoLabel();}
 
-          | IF error END_IF                                             {yyerror("Estructura IF incorrecta");}
+          | IF error END_IF                                             {yynotify(1, "Estructura IF incorrecta");}
 
 ;
 
@@ -139,9 +139,9 @@ cond_if : condicion 	                                                  {tg.terce
 
 
 
-cpo_if : THEN cpo_then ELSE cpo_else END_IF                             {yyerror("Estructura IF correcta.");}
+cpo_if : THEN cpo_then ELSE cpo_else END_IF                             {yynotify(2, "Estructura IF correcta.");}
 
-       | THEN cpo_then END_IF                                           {yyerror("Estructura IF correcta.");}
+       | THEN cpo_then END_IF                                           {yynotify(2, "Estructura IF correcta.");}
 
 ;
 
@@ -190,7 +190,7 @@ op : COMP_DISTINTO
 
 iteracion : DO_IND cpo_until
 
-          | DO_IND error '.'                                                 {yyerror("Estructura UNTIL incorrecta.");}
+          | DO_IND error '.'                                                 {yynotify(1, "Estructura UNTIL incorrecta.");}
 
 ;
 
@@ -205,7 +205,7 @@ DO_IND    : DO                                                            {tg.se
 
 cpo_until : bloque UNTIL '(' cond_until ')''.'                           {tg.tercetoIteration("BF");
 
-                                                                          yyerror("Estructura UNTIL correcta.");}
+                                                                          yynotify(2, "Estructura UNTIL correcta.");}
 
 ;
 
@@ -225,7 +225,7 @@ asignacion : ID '=' expresion'.'                                          {tg.se
 
 
 
-           | ID error expresion'.'                                        {yyerror("Asignacion incorrecta.");}
+           | ID error expresion'.'                                        {yynotify(1, "Asignacion incorrecta.");}
 
 ;
 
@@ -233,7 +233,7 @@ asignacion : ID '=' expresion'.'                                          {tg.se
 
 bloque : BEGIN grupo_de_sentencias END
 
-       | BEGIN error END                                                  {yyerror("Error en bloque.");}
+       | BEGIN error END                                                  {yynotify(1, "Error en bloque.");}
 
 ;
 
@@ -324,12 +324,14 @@ private int yylex(){
     return token;
 }
 
-private void yyerror(String mensaje){
-    if(!mensaje.contains("syntax error")){
+private void yyerror(String msj){
+}
+
+private void yynotify(int type, String mensaje){
         System.out.println(mensaje);
-        String s = Printer.getMessage(1,1, la.getValues().getCurrentLine(), mensaje); //v.currentLine
+        String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje); //v.currentLine
         la.getCompilationOutput().write(s);
-    }
+    
 }
 
 public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
