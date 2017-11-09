@@ -164,6 +164,7 @@ public class TercetoGenerator {
             aux1 = this.lastDeclaration(field1);
             System.out.println("Entra con*: "+field1+" "+field1.getCode());
         }
+
         if(field2.getCode() == Constants.ID)
             aux2 = this.lastDeclaration(field2);
         else
@@ -171,16 +172,19 @@ public class TercetoGenerator {
 
         int typeTerceto1 = whatType(aux1);
         int typeTerceto2 = whatType(aux2);
-        System.out.println(typeTerceto1+"---"+typeTerceto2);
+
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
-        if( type == -1)
-            System.out.println("Terceto: "+indexTerceto+" Incompatibilidad de tipos: "+typeTerceto1+ " y "+typeTerceto2);
+
+        if( type == -1) {
+            System.out.println("Terceto: " + indexTerceto + " Incompatibilidad de tipos: " + typeTerceto1 + " y " + typeTerceto2);
+        }
         else {
             aux.setType(String.valueOf(type));
         }
+
         aux.setField1(aux1);
-        System.out.println("guarda "+indexTerceto+" "+aux1.getCode());
         aux.setField2(aux2);
+
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
 
         // Variable auxiliar asociada a cada terceto.
@@ -199,6 +203,7 @@ public class TercetoGenerator {
      * Si es una CTE devuelve la misma
      * De lo contrario solo devueelve una referencia al terceto anterior*/
     public Data lastDeclaration(Data field){
+
         if(field.getCode() == Constants.ID) {
             for (int i = tercetos.size(); i > 0; i--) {
                 if (tercetos.get(i).getField1().getLexema().equals(field.getLexema())
@@ -209,7 +214,7 @@ public class TercetoGenerator {
                 }
             }
         }
-        if(field.getCode() == Constants.CTE || field.getCode() == Constants.PUN_TERCETO)
+        if(field.getCode() == Constants.CTE || field.getCode() == Constants.PUN_TERCETO || field.getCode() == Constants.ID)
             return field;
         return new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO));
     }
