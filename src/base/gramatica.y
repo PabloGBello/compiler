@@ -247,7 +247,7 @@ grupo_de_sentencias : ejecutable
 
 
 
-expresion : I_F expresion_s
+expresion : I_F expresion_s                                            
 
           | expresion_s
 

@@ -427,6 +427,7 @@ public static void main(String[] args) {
 }
 
 private int yylex(){
+
 	int token = la.yylex();
     yylval = new ParserVal(la.val);
     return token;

@@ -135,7 +135,8 @@ public class AssemblerGenerator {
                 break;
         }
 
-        String aux = tercetoCMP.getField2().getLexema();
+        String aux = terceto.getField2().getLexema();
+        aux = aux.substring(1,aux.length()-1);
         int pos = Integer.valueOf(aux);
         result = oper + " Label"+ pos;
         return result;
