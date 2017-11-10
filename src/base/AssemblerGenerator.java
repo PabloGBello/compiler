@@ -85,6 +85,8 @@ public class AssemblerGenerator {
                 case "Label":
                     codeAssembler = operatorAux;
                     break;
+                case "OUT":
+                    codeAssembler = "invoke MessageBox, NULL, addr OUT, addr " + terceto.getField1().getLexema() + ", MB_OK";
                 default:
                     codeAssembler = generateCMP(terceto);
                     break;
