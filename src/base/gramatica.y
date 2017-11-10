@@ -112,7 +112,7 @@ ejecutable : seleccion
 
            | asignacion
 
-           | OUT '(' CADENA ')'
+           | OUT '(' CADENA ')''.'                                       {tercetoOUT((Data)$3.obj);}                              
 
            | LET asignacion
 
@@ -247,9 +247,8 @@ grupo_de_sentencias : ejecutable
 
 
 
-expresion : I_F expresion_s                                            
+expresion : expresion_s                                            
 
-          | expresion_s
 
 ;                                                 
 
@@ -282,6 +281,8 @@ factor : ID                                                               {tg.se
        | '-'CTE                                                           {addSymbol((Data)$2.obj);
 
                                                                           tg.setFptr((Data)$2.obj);}
+
+       | I_F'('expresion_s')'                                             {tg.setFptr(tg.lastDeclaration((Data)$3.obj));}                                                  
 
 ;
 

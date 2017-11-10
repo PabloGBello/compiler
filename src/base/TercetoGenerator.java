@@ -133,6 +133,16 @@ public class TercetoGenerator {
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
     }
+    public void  tercetoOUT(Data field){
+        Terceto aux = new Terceto();
+        aux.setIndex(indexTerceto);
+        aux.setOperator(new Data("OUT",String.valueOf(Constants.CADENA)));
+        aux.setField1(field);
+        aux.setField2(new Data("-",String.valueOf(Constants.CADENA)));
+        aux.setType(String.valueOf(Constants.CADENA));
+        tercetos.put(indexTerceto, aux);
+        indexTerceto++;
+    }
 
     public void tercetoDesapilar(int b){
         if(b == 1)

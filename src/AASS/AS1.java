@@ -42,10 +42,9 @@ public class AS1 extends SemanticAction {
                 st.addSymbol(Constants.ID, lex);
             }
         }
-
         aux.add(st.getKey(lex));
         aux.add(st.getPosition(lex));
-
+        System.out.println("ghh: "+aux);
         return aux;
     }
 

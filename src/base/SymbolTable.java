@@ -51,7 +51,10 @@ public class SymbolTable {
 
         Data data = new Data(value);
         data.setCode(key);
+        if(key == Constants.CADENA)
+            data.setType(String.valueOf(key));
         simbolos.get(key).add(data);
+
     }
 
     public void addItem(Integer key, String value, String type) {
