@@ -5,7 +5,16 @@ import java.util.List;
 
 public class AssemblerGenerator {
 
-    public static final String HEAD = ".MODEL small\r\n.STACK 200h\r\n.DATA";
+    public static final String HEAD = ".386\r\n" +
+            ".MODEL small, stdcall\r\n" +
+            ".STACK 200h\r\n" +
+            "option casemap :none\r\n" +
+            "include\"masm32\"include\"windows.inc\r\n" +
+            "include\"masm32\"include\"kernel32.inc\r\n" +
+            "include\"masm32\"include\"user32.inc\r\n" +
+            "includelib\"masm32\"lib\"kernel32.lib\r\n" +
+            "includelib\"masm32\"lib\"user32.lib\r\n" +
+            ".DATA";
 
     private Hashtable<Integer, Terceto> tercetos;
     private Data field1;
