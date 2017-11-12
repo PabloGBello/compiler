@@ -109,7 +109,6 @@ public class TercetoGenerator {
         pila.add(indexTerceto);
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
-        System.out.println("index terceto "+indexTerceto);
     }
     public void tercetoLabel(){
         Terceto aux = new Terceto();
@@ -153,6 +152,29 @@ public class TercetoGenerator {
         }
     }
 
+    public void tercetoI_F(Data field){
+        if(Integer.valueOf(field.getType()) == Constants.INT) {
+            Terceto aux = new Terceto();
+            aux.setIndex(indexTerceto);
+            Data op = new Data("I_F", String.valueOf(Constants.I_F));
+            op.setCode(Constants.I_F);
+            aux.setOperator(op);
+            Data field1 = new Data(lastDeclaration(field));
+            //field1.setType(String.valueOf(Constants.FLOAT));
+            aux.setField1(field1);
+            aux.setField2(new Data("-", String.valueOf(Constants.FLOAT)));
+            aux.setType(String.valueOf(Constants.FLOAT));
+            Data info = new Data("@aux" + aux.getIndex(),aux.getType());
+            aux.setVarAux(info);
+
+            ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
+            tercetos.put(indexTerceto, aux);
+            indexTerceto++;
+            this.setFptr(new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO)));
+        }else {
+            this.setFptr(field);
+        }
+    }
 
     public Data createTerceto(String operator, Data field1, Data field2){
 
@@ -162,17 +184,13 @@ public class TercetoGenerator {
         }
 
         Terceto aux = new Terceto();
-
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
         if(operator.equals("=")) {
             aux1 = field1;
-            System.out.println("Crea terceto igual con: "+field1.getCode());
-        }
-        else {
+        } else {
             aux1 = this.lastDeclaration(field1);
-            System.out.println("Entra con*: "+field1+" "+field1.getCode());
         }
 
         if(field2.getCode() == Constants.ID)

@@ -44,7 +44,6 @@ public class AS1 extends SemanticAction {
         }
         aux.add(st.getKey(lex));
         aux.add(st.getPosition(lex));
-        System.out.println("ghh: "+aux);
         return aux;
     }
 

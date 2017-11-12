@@ -9,11 +9,11 @@ public class AssemblerGenerator {
             ".MODEL small, stdcall\r\n" +
             ".STACK 200h\r\n" +
             "option casemap :none\r\n" +
-            "include\"masm32\"include\"windows.inc\r\n" +
-            "include\"masm32\"include\"kernel32.inc\r\n" +
-            "include\"masm32\"include\"user32.inc\r\n" +
-            "includelib\"masm32\"lib\"kernel32.lib\r\n" +
-            "includelib\"masm32\"lib\"user32.lib\r\n" +
+            "include \\masm32\\include\\windows.inc" +"\r\n" +
+            "include \\masm32\\include\\kernel32.inc\r\n" +
+            "include \\masm32\\include\\user32.inc\r\n" +
+            "includelib \\masm32\\lib\\kernel32.lib\r\n" +
+            "includelib \\masm32\\lib\\user32.lib\r\n" +
             ".DATA";
 
     private Hashtable<Integer, Terceto> tercetos;
@@ -39,6 +39,7 @@ public class AssemblerGenerator {
     }
 
     public void generate() {
+        System.out.println(HEAD);
 
         assemblerCode.write(HEAD);
         generateDeclarations();
@@ -88,6 +89,9 @@ public class AssemblerGenerator {
                 case "OUT":
                     codeAssembler = "invoke MessageBox, NULL, addr OUT, addr " + terceto.getField1().getLexema() + ", MB_OK";
                     break;
+                case "I_F":
+                    codeAssembler = generateI_F(terceto);
+                    break;
                 default:
                     codeAssembler = generateCMP(terceto);
                     break;
@@ -103,11 +107,30 @@ public class AssemblerGenerator {
 
         List<Data> declarations = ST.getSimbolos().get(Constants.ID);
         for (Data d : declarations) {
-            if (Integer.valueOf(d.getType()).equals(Constants.INT))
-                assemblerCode.write(d.getLexema() + " DW ?");
-            else
-                assemblerCode.write(d.getLexema() + " DD ?");
+            if (Integer.valueOf(d.getType()).equals(Constants.INT)) {
+                if (d.getLexema().contains("@"))
+                    assemblerCode.write( d.getLexema() + " DW ?");
+                else
+                    assemblerCode.write("_" + d.getLexema() + " DW ?");
+            }else {
+                if (d.getLexema().contains("@"))
+                    assemblerCode.write( d.getLexema() + " DD ?");
+                else
+                    assemblerCode.write("_" + d.getLexema() + " DD ?");
+            }
         }
+    }
+
+    public String generateI_F(Terceto terceto) {
+
+        String result = "";
+
+        result = "MOV EAX," + field1.getLexema() + "\r\n" +
+                "MOV " + terceto.getVarAux().getLexema() + ",EAX";
+
+        //float res = ((Float) field1.getValue()) - ((Float) field2.getValue());
+        //terceto.getVarAux().setValue(res);
+        return result;
     }
 
     public String generateBI(Terceto terceto) {
@@ -161,6 +184,7 @@ public class AssemblerGenerator {
     }
 
     public String generateMult(Terceto terceto) {
+        System.out.println("Crea multiplicacion con: "+terceto);
         String result = "";
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
@@ -170,7 +194,7 @@ public class AssemblerGenerator {
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
 
             int res = ((Integer) field1.getValue()) * ((Integer) field2.getValue());
-
+            System.out.println("over "+ res);
             // Overflow
             if (res > Integer.MAX_VALUE || res < Integer.MIN_VALUE)
                 result = "invoke MessageBox, NULL, addr ERROR!, addr INT_OVERFLOW : Multiplication Result, MB_OK\r\ninvoke ExitProcess, 0";
@@ -284,11 +308,15 @@ public class AssemblerGenerator {
     public String generateAsig(Terceto terceto) {
 
         String result = "";
+        System.out.println("GenerateAsig terceto: " +terceto+"  "+field1+"  "+field2);
         field1.setValue(field2.getValue());
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
             result = "MOV AX," + field2.getLexema() + "\r\n" +
-                    "MOV " + field1.getLexema() + ",AX";
+                    "MOV _" + field1.getLexema() + ",AX" + "\r\n" +
+                    "MOV " + terceto.getVarAux().getLexema() + ",_" + field1.getLexema();
+
+
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
             result = "MOV EAX," + field2.getLexema() + "\r\n" +
                     "MOV " + field1.getLexema() + ",EAX";
@@ -334,6 +362,7 @@ public class AssemblerGenerator {
 
             field1 = terceto.getField1();
             field2 = terceto.getField2();
+            System.out.println("Entra al caso 4 con:" + terceto);
         }
     }
 

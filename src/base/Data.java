@@ -11,6 +11,14 @@ public class Data {
     private String lexema, type;
     private Comparable value;
 
+    public Data(Data o){
+        this.codigo = o.getCode();
+        this.numero = o.getNumero();
+        this.lexema = o.getLexema();
+        this.type = o.getType();
+        this.value = o .getValue();
+    }
+
     public Data(){
     }
 

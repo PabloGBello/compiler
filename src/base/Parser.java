@@ -408,8 +408,7 @@ public TercetoGenerator getTg(){
     return tg;
 }
 
-public static void main(String[] args){
-
+public static void main(String[] args) {
     Parser parser = new Parser(args[0]);
     int parsedValue = parser.yyparse();
     System.out.println(parsedValue);
@@ -732,7 +731,7 @@ case 50:
 break;
 case 51:
 //#line 285 "gramatica.y"
-{tg.setFptr(tg.lastDeclaration((Data)val_peek(1).obj));}
+{tg.tercetoI_F((Data)val_peek(1).obj);}
 break;
 //#line 660 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########

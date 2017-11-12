@@ -282,7 +282,7 @@ factor : ID                                                               {tg.se
 
                                                                           tg.setFptr((Data)$2.obj);}
 
-       | I_F'('expresion_s')'                                             {tg.setFptr(tg.lastDeclaration((Data)$3.obj));}                                                  
+       | I_F'('expresion_s')'                                             {tg.tercetoI_F((Data)$3.obj);}                                                  
 
 ;
 
