@@ -232,6 +232,7 @@ public class AssemblerGenerator {
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
 
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
+
             result = "FLD " +field1.getLexema() + "\r\n" +
                     "FSTP @f_a1" + "\r\n" +
                     "FLD " +field2.getLexema() + "\r\n" +
@@ -240,15 +241,15 @@ public class AssemblerGenerator {
                     "FLD @f_a2" + "\r\n" +
                     "FMUL " + "\r\n" +
                     "FSTP " + terceto.getVarAux().getLexema() +"\r\n" +
-                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" +
-                    "FLD @f_max" + "\r\n" +
+                    "FLD @f_max" + "\r\n" +         /****A*/
+                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
                     "FCOMPP"  + "\r\n" +
                     "FSTSW AX" + "\r\n" +
                     "FFREE ST(0)"  + "\r\n" +
                     "FFREE ST(1)"  + "\r\n" +
                     "FWAIT"  + "\r\n" +
                     "SAHF"  + "\r\n" +
-                    "JG Label" + terceto.getIndex() + "\r\n" +
+                    "JBE Label" + terceto.getIndex() + "\r\n" + /****B <= A*/
                     error + "\r\n" +
                     "Label" + terceto.getIndex() + ":";
         }
@@ -319,7 +320,6 @@ public class AssemblerGenerator {
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
-
             result = "FLD " +field1.getLexema() + "\r\n" +
                     "FSTP @f_a1" + "\r\n" +
                     "FLD " +field2.getLexema() + "\r\n" +
@@ -328,15 +328,15 @@ public class AssemblerGenerator {
                     "FLD @f_a2" + "\r\n" +
                     "FADD " + "\r\n" +
                     "FSTP " + terceto.getVarAux().getLexema() +"\r\n" +
-                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" +
-                    "FLD @f_max" + "\r\n" +
+                    "FLD @f_max" + "\r\n" +         /****A*/
+                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
                     "FCOMPP"  + "\r\n" +
                     "FSTSW AX" + "\r\n" +
                     "FFREE ST(0)"  + "\r\n" +
                     "FFREE ST(1)"  + "\r\n" +
                     "FWAIT"  + "\r\n" +
                     "SAHF"  + "\r\n" +
-                    "JG Label" + terceto.getIndex() + "\r\n" +
+                    "JBE Label" + terceto.getIndex() + "\r\n" + /****B <= A*/
                     error + "\r\n" +
                     "Label" + terceto.getIndex() + ":";
         }
