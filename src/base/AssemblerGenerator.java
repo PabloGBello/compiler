@@ -356,6 +356,7 @@ public class AssemblerGenerator {
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
             result = "FLD " + field2.getLexema() + "\r\n" +
                     "FSTP _" + field1.getLexema() + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
                     "FSTP " + terceto.getVarAux().getLexema();
         }
         terceto.getVarAux().setValue(field2.getValue());
