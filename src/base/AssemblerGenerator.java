@@ -212,7 +212,14 @@ public class AssemblerGenerator {
 
     public String generateCMP(Terceto terceto) {
         String result = "";
-        result = "CMP " + field1.getLexema() + "," + field2.getLexema();
+        if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
+            result = "CMP " + field1.getLexema() + "," + field2.getLexema();
+        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
+            result = "FLD " + field1.getLexema() +"\r\n" +
+                    "FLD "+ field2.getLexema() + "\r\n" +
+                    "FCOMPP"  + "\r\n" +
+                    "FSTSW AX";
+        }
         return result;
     }
 
