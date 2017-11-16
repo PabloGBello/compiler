@@ -144,7 +144,7 @@ public class AssemblerGenerator {
 
                 if(contFloat == 1){
                     assemblerCode.write("@f_max " + "DQ 3.40e38");
-                    assemblerCode.write("@f_mim " + "DQ 1.18e-38");
+                    assemblerCode.write("@f_min " + "DQ 1.18e-38");
                     assemblerCode.write("@f_a1"  + " DQ ?");
                     assemblerCode.write("@f_a2"  + " DQ ?");
                 }
@@ -233,9 +233,9 @@ public class AssemblerGenerator {
 
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
-            result = "FLD " +field1.getLexema() + "\r\n" +
+            result = "FLD " + field1.getLexema() + "\r\n" +
                     "FSTP @f_a1" + "\r\n" +
-                    "FLD " +field2.getLexema() + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
                     "FSTP @f_a2" + "\r\n" +
                     "FLD @f_a1" + "\r\n" +
                     "FLD @f_a2" + "\r\n" +
@@ -249,9 +249,20 @@ public class AssemblerGenerator {
                     "FFREE ST(1)"  + "\r\n" +
                     "FWAIT"  + "\r\n" +
                     "SAHF"  + "\r\n" +
-                    "JBE Label" + terceto.getIndex() + "\r\n" + /****B <= A*/
+                    "JBE Label_mul1" + terceto.getIndex() + "\r\n" + /****B <= A*/
                     error + "\r\n" +
-                    "Label" + terceto.getIndex() + ":";
+                    "Label_mul1" + terceto.getIndex() + ":" + "\r\n" +
+                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
+                    "FLD @f_min" + "\r\n" +         /****A*/
+                    "FCOMPP"  + "\r\n" +
+                    "FSTSW AX" + "\r\n" +
+                    "FFREE ST(0)"  + "\r\n" +
+                    "FFREE ST(1)"  + "\r\n" +
+                    "FWAIT"  + "\r\n" +
+                    "SAHF"  + "\r\n" +
+                    "JBE Label_mul2" + terceto.getIndex() + "\r\n" + /****A <= B*/
+                    error + "\r\n" +
+                    "Label_mul2" + terceto.getIndex() + ":";
         }
         return result;
     }
@@ -264,10 +275,16 @@ public class AssemblerGenerator {
             result = "MOV AX," + field1.getLexema() + "\r\n" +
                     "SUB AX," + field2.getLexema() + "\r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
-        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
-            result = "MOV EAX," + field1.getLexema() + "\r\n" +
-                    "SUB EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",EAX";
+        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)){
+
+            result = "FLD " +field1.getLexema() + "\r\n" +
+                    "FSTP @f_a1" + "\r\n" +
+                    "FLD " +field2.getLexema() + "\r\n" +
+                    "FSTP @f_a2" + "\r\n" +
+                    "FLD @f_a1" + "\r\n" +
+                    "FLD @f_a2" + "\r\n" +
+                    "FSUB " + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema();
         }
         return result;
     }
@@ -291,16 +308,26 @@ public class AssemblerGenerator {
                     "MOV " + terceto.getVarAux().getLexema() + ",BX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
-            result = "MOV AX,0"+ " \r\n" +
-                    "CMP AX," + field2.getLexema() + " \r\n" +
+            result = "FLDZ\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FCOMPP"  + "\r\n" +
+                    "FSTSW AX" + "\r\n" +
+                    "FFREE ST(0)"  + "\r\n" +
+                    "FFREE ST(1)"  + "\r\n" +
+                    "FWAIT"  + "\r\n" +
+                    "SAHF"  + "\r\n" +
                     "JNE Label" + terceto.getIndex() + "\r\n" +
                     error + "\r\n" +
-                    "Label" + terceto.getIndex() + ": \r\n" +
-                    "MOV EAX," + field1.getLexema() + "\r\n" +
-                    "FDIV EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",EAX";
+                    "Label" + terceto.getIndex() + ":" + "\r\n" +
+                    "FLD " + field1.getLexema() + "\r\n" +
+                    "FSTP @f_a1" + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FSTP @f_a2" + "\r\n" +
+                    "FLD @f_a1" + "\r\n" +
+                    "FLD @f_a2" + "\r\n" +
+                    "FDIV " + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema();
         }
-
         return result;
     }
 
@@ -320,9 +347,9 @@ public class AssemblerGenerator {
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
-            result = "FLD " +field1.getLexema() + "\r\n" +
+            result = "FLD " + field1.getLexema() + "\r\n" +
                     "FSTP @f_a1" + "\r\n" +
-                    "FLD " +field2.getLexema() + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
                     "FSTP @f_a2" + "\r\n" +
                     "FLD @f_a1" + "\r\n" +
                     "FLD @f_a2" + "\r\n" +
@@ -336,9 +363,20 @@ public class AssemblerGenerator {
                     "FFREE ST(1)"  + "\r\n" +
                     "FWAIT"  + "\r\n" +
                     "SAHF"  + "\r\n" +
-                    "JBE Label" + terceto.getIndex() + "\r\n" + /****B <= A*/
+                    "JBE Label_add1" + terceto.getIndex() + "\r\n" + /****B <= A*/
                     error + "\r\n" +
-                    "Label" + terceto.getIndex() + ":";
+                    "Label_add1" + terceto.getIndex() + ":";
+                    //"FLD @f_min" + "\r\n" +         /****A*/
+                    //"FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
+                    //"FCOMPP"  + "\r\n" +
+                    //"FSTSW AX" + "\r\n" +
+                    //"FFREE ST(0)"  + "\r\n" +
+                    //"FFREE ST(1)"  + "\r\n" +
+                    //"FWAIT"  + "\r\n" +
+                    //"SAHF"  + "\r\n" +
+                    //"JGE Label_add2" + terceto.getIndex() + "\r\n" + /****B >= A*/
+                    //error + "\r\n" +
+                    //"Label_add2" + terceto.getIndex() + ":";*/
         }
         return result;
     }
