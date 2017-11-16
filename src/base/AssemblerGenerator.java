@@ -355,17 +355,20 @@ public class AssemblerGenerator {
                     "FLD @f_a2" + "\r\n" +
                     "FADD " + "\r\n" +
                     "FSTP " + terceto.getVarAux().getLexema() +"\r\n" +
-                    "FLD @f_max" + "\r\n" +         /****A*/
                     "FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
+                    "FLD @f_max" + "\r\n" +         /****A*/
                     "FCOMPP"  + "\r\n" +
                     "FSTSW AX" + "\r\n" +
                     "FFREE ST(0)"  + "\r\n" +
                     "FFREE ST(1)"  + "\r\n" +
                     "FWAIT"  + "\r\n" +
                     "SAHF"  + "\r\n" +
-                    "JBE Label_add1" + terceto.getIndex() + "\r\n" + /****B <= A*/
+                    "JNBE Label_add1" + terceto.getIndex() + "\r\n" + /****B <= A*/
                     error + "\r\n" +
                     "Label_add1" + terceto.getIndex() + ":";
+
+
+
                     //"FLD @f_min" + "\r\n" +         /****A*/
                     //"FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
                     //"FCOMPP"  + "\r\n" +
