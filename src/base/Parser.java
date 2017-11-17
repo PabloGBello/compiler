@@ -739,7 +739,7 @@ case 51:
 break;
 case 52:
 //#line 277 "gramatica.y"
-{tg.tercetoI_F((Data)val_peek(1).obj);}
+{tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
 //#line 668 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
