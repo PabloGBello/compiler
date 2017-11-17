@@ -74,6 +74,6 @@ public class Data {
     }
 
     public String toString(){
-        return "["+lexema+","+type+"]";
+        return "["+lexema+","+type+"] "+codigo;
     }
 }

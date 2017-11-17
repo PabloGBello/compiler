@@ -31,7 +31,7 @@ public class AS12 extends SemanticAction {
         Float sup = Float.valueOf("3.40282347E38");
 
         Float fVal = Float.valueOf(lex.replace(',','.'));
-
+        lex = fVal.toString();
         if(fVal < inf || fVal > sup){
             String s = Printer.getMessage(0,0, v.getCurrentLine(), "Constante flotante fuera del rango permitido " + lex);
             st.getCompilationOutput().write(s);

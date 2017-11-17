@@ -6,7 +6,7 @@ import java.util.List;
 public class AssemblerGenerator {
 
     public static final String HEAD = ".386\r\n" +
-            ".MODEL small, stdcall\r\n" +
+            ".MODEL flat, stdcall\r\n" +
             ".STACK 200h\r\n" +
             "option casemap :none\r\n" +
             "include \\masm32\\include\\windows.inc" +"\r\n" +
@@ -22,7 +22,7 @@ public class AssemblerGenerator {
     private FileHandler assemblerCode;
     private FileHandler tercetosCode;
     private SymbolTable ST;
-
+    private int contadorOUT = 1;
     public AssemblerGenerator(Hashtable<Integer, Terceto> tercetos) {
         this.tercetos = tercetos;
     }
@@ -39,17 +39,15 @@ public class AssemblerGenerator {
     }
 
     public void generate() {
-        System.out.println(HEAD);
-
         assemblerCode.write(HEAD);
         generateDeclarations();
-        assemblerCode.write(".CODE\r\nSTART:\r\nMOV AX,@data\r\nMOV DS,AX");
+        assemblerCode.write(".CODE\r\nSTART:");
 
         for (Integer index = 1; index <= tercetos.keySet().size(); index++) {
 
             Terceto terceto = tercetos.get(index);
             tercetosCode.write(terceto.toString());
-            String codeAssembler;
+            String codeAssembler = "";
             String operator = terceto.getOperator().getLexema();
             String operatorAux = "";
 
@@ -86,8 +84,10 @@ public class AssemblerGenerator {
                 case "Label":
                     codeAssembler = operatorAux;
                     break;
-                case "OUT":
-                    codeAssembler = "invoke MessageBox, NULL, addr OUT, addr " + terceto.getField1().getLexema() + ", MB_OK";
+                case "OUT": {
+                    codeAssembler += "invoke MessageBox, NULL, addr Mensaje"+contadorOUT+", addr " + "Mensaje , MB_OK";
+                    contadorOUT++;
+                }
                     break;
                 case "I_F":
                     codeAssembler = generateI_F(terceto);
@@ -109,15 +109,47 @@ public class AssemblerGenerator {
         for (Data d : declarations) {
             if (Integer.valueOf(d.getType()).equals(Constants.INT)) {
                 if (d.getLexema().contains("@"))
-                    assemblerCode.write( d.getLexema() + " DW ?");
+                    assemblerCode.write(d.getLexema() + " DW ?");
                 else
                     assemblerCode.write("_" + d.getLexema() + " DW ?");
             }
             else {
                 if (d.getLexema().contains("@"))
-                    assemblerCode.write( d.getLexema() + " DD ?");
+                    assemblerCode.write(d.getLexema() + " DQ ?");
                 else
-                    assemblerCode.write("_" + d.getLexema() + " DD ?");
+                    assemblerCode.write("_" + d.getLexema() + " DQ ?");
+            }
+        }
+        declarations.clear();
+        declarations = ST.getSimbolos().get(Constants.CADENA);
+        int cont = 1;
+        assemblerCode.write("Mensaje db "+ "\"Mensaje\"" +", 0");
+        assemblerCode.write( "ERROR_DIV db \"Division by zero\", 0");
+        assemblerCode.write( "ERROR_OVERF db \"Overflow in result\", 0");
+        //assemblerCode.write( "ERROR_DIV db \"Division by zero\", 0");
+        //assemblerCode.write( "ERROR_DIV db \"Division by zero\", 0");
+
+        for (Data d : declarations) {
+            assemblerCode.write( "Mensaje"+cont+" db "+ d.getLexema() + ", 0");
+            cont++;
+        }
+        declarations.clear();
+        declarations = ST.getSimbolos().get(Constants.CTE);
+        int contFloat =1;
+        for(Data d : declarations){
+            if(Integer.valueOf(d.getType()) == Constants.FLOAT){
+                String auxF = "@float"+contFloat;
+                assemblerCode.write(auxF + " DQ "+d.getLexema());
+                d.setLexema(auxF);
+
+                if(contFloat == 1){
+                    assemblerCode.write("@f_max " + "DQ 3.40282347e38");
+                    assemblerCode.write("@f_min " + "DQ 1.18e-38");
+                    assemblerCode.write("@f_a1"  + " DQ ?");
+                    assemblerCode.write("@f_a2"  + " DQ ?");
+                }
+
+                contFloat++;
             }
         }
     }
@@ -126,11 +158,9 @@ public class AssemblerGenerator {
 
         String result = "";
 
-        result = "MOV EAX," + field1.getLexema() + "\r\n" +
-                "MOV " + terceto.getVarAux().getLexema() + ",EAX";
+        result = "FILD " + field1.getLexema() + "\r\n" +
+                 "FSTP " + terceto.getVarAux().getLexema();
 
-        //float res = ((Float) field1.getValue()) - ((Float) field2.getValue());
-        //terceto.getVarAux().setValue(res);
         return result;
     }
 
@@ -180,39 +210,53 @@ public class AssemblerGenerator {
 
     public String generateCMP(Terceto terceto) {
         String result = "";
-        result = "CMP " + field1.getLexema() + "," + field2.getLexema();
+        if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
+            result = "CMP " + field1.getLexema() + "," + field2.getLexema();
+        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
+            result = "FLD " + field1.getLexema() +"\r\n" +
+                     "FCOM "+ field2.getLexema() + "\r\n" +
+                     "FSTSW BX"  + "\r\n" +
+                     "MOV AX, BX"+ "\r\n" +
+                     "SAHF";
+        }
         return result;
     }
 
     public String generateMult(Terceto terceto) {
-        System.out.println("Crea multiplicacion con: "+terceto);
         String result = "";
+
+        String error = "invoke MessageBox, NULL, addr ERROR_OVERF, addr Mensaje, MB_OK\r\ninvoke ExitProcess, 0";
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
 
             result = "MOV AX," + field1.getLexema() + "\r\n" +
-                    "MUL AX," + field2.getLexema() + "\r\n" +
+                    "IMUL AX," + field2.getLexema() + "\r\n" +
+                    "JNO Label" + terceto.getIndex() + "\r\n" +
+                    error + "\r\n" +
+                    "Label" + terceto.getIndex() + ": \r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
 
-            int res = ((Integer) field1.getValue()) * ((Integer) field2.getValue());
-            System.out.println("over "+ res);
-            // Overflow
-            if (res > Integer.MAX_VALUE || res < Integer.MIN_VALUE)
-                result = "invoke MessageBox, NULL, addr ERROR!, addr INT_OVERFLOW : Multiplication Result, MB_OK\r\ninvoke ExitProcess, 0";
-            else
-                terceto.getVarAux().setValue(res);
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
-            result = "MOV EAX," + field1.getLexema() + "\r\n" +
-                    "MUL EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",EAX";
 
-            float res = ((Float) field1.getValue()) * ((Float) field2.getValue());
-
-            // Overflow
-            if (res > Float.MAX_VALUE || res < Float.MIN_VALUE)
-                result = "invoke MessageBox, NULL, addr ERROR!, addr FLOAT_OVERFLOW : Multiplication Result, MB_OK\r\ninvoke ExitProcess, 0";
-            else
-                terceto.getVarAux().setValue(res);
+            result = "FLD " + field1.getLexema() + "\r\n" +
+                    "FSTP @f_a1" + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FSTP @f_a2" + "\r\n" +
+                    "FLD @f_a1" + "\r\n" +
+                    "FLD @f_a2" + "\r\n" +
+                    "FMUL " + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema() +"\r\n" +
+                    "FLD @f_max" + "\r\n" +         /****A*/
+                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
+                    "FCOMPP"  + "\r\n" +
+                    "FSTSW AX" + "\r\n" +
+                    "FFREE ST(0)"  + "\r\n" +
+                    "FFREE ST(1)"  + "\r\n" +
+                    "FWAIT"  + "\r\n" +
+                    "SAHF"  + "\r\n" +
+                    "JBE Label_mul1" + terceto.getIndex() + "\r\n" + /****B <= A*/
+                    error + "\r\n" +
+                    "Label_mul1" + terceto.getIndex() + ":";
         }
         return result;
     }
@@ -225,15 +269,16 @@ public class AssemblerGenerator {
             result = "MOV AX," + field1.getLexema() + "\r\n" +
                     "SUB AX," + field2.getLexema() + "\r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
-            int res = ((Integer) field1.getValue()) - ((Integer) field2.getValue());
-            terceto.getVarAux().setValue(res);
-        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
-            result = "MOV EAX," + field1.getLexema() + "\r\n" +
-                    "SUB EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",EAX";
+        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)){
 
-            float res = ((Float) field1.getValue()) - ((Float) field2.getValue());
-            terceto.getVarAux().setValue(res);
+            result = "FLD " +field1.getLexema() + "\r\n" +
+                    "FSTP @f_a1" + "\r\n" +
+                    "FLD " +field2.getLexema() + "\r\n" +
+                    "FSTP @f_a2" + "\r\n" +
+                    "FLD @f_a1" + "\r\n" +
+                    "FLD @f_a2" + "\r\n" +
+                    "FSUB " + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema();
         }
         return result;
     }
@@ -241,67 +286,80 @@ public class AssemblerGenerator {
     public String generateDiv(Terceto terceto) {
 
         String result = "";
-        String error = "invoke MessageBox, NULL, addr ERROR!, addr Division by zero, MB_OK\r\ninvoke ExitProcess, 0";
+        String error = "invoke MessageBox, NULL, addr ERROR_DIV, addr Mensaje, MB_OK\r\ninvoke ExitProcess, 0";
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
 
-            result = "MOV AX," + field1.getLexema() + "\r\n" +
-                    "DIV AX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",AX";
-
-            // Verificacion division por zero en las variables de tipo INT
-            if (((Integer)field2.getValue()).equals(0))
-                result = error;
-            else {
-                int res = ((Integer) field1.getValue()) / ((Integer) field2.getValue());
-                terceto.getVarAux().setValue(res);
-            }
-
+            result = "MOV AX,0"+ " \r\n" +
+                    "CMP AX," + field2.getLexema() + " \r\n" +
+                    "JNE Label" + terceto.getIndex() + "\r\n" +
+                    error + "\r\n" +
+                    "Label" + terceto.getIndex() + ":\r\n" +
+                    "MOV AX," + field1.getLexema() + "\r\n" +
+                    "MOV DX,0" + "\r\n" +
+                    "MOV BX," + field2.getLexema() + "\r\n" +
+                    "IDIV BX" + "\r\n" +
+                    "MOV " + terceto.getVarAux().getLexema() + ",BX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
-            result = "MOV EAX," + field1.getLexema() + "\r\n" +
-                    "DIV EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",EAX";
 
-            // Verificacion division por zero en las variables de tipo FLOAT
-            if (((Float)field2.getValue()).equals(0))
-                result = error;
-            else {
-                float res = ((Float) field1.getValue()) / ((Float) field2.getValue());
-                terceto.getVarAux().setValue(res);
-            }
+            result = "FLDZ\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FCOMPP"  + "\r\n" +
+                    "FSTSW AX" + "\r\n" +
+                    "FFREE ST(0)"  + "\r\n" +
+                    "FFREE ST(1)"  + "\r\n" +
+                    "FWAIT"  + "\r\n" +
+                    "SAHF"  + "\r\n" +
+                    "JNE Label" + terceto.getIndex() + "\r\n" +
+                    error + "\r\n" +
+                    "Label" + terceto.getIndex() + ":" + "\r\n" +
+                    "FLD " + field1.getLexema() + "\r\n" +
+                    "FSTP @f_a1" + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FSTP @f_a2" + "\r\n" +
+                    "FLD @f_a1" + "\r\n" +
+                    "FLD @f_a2" + "\r\n" +
+                    "FDIV " + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema();
         }
-
         return result;
     }
 
     public String generateAdd(Terceto terceto) {
 
         String result = "";
+
+        String error = "invoke MessageBox, NULL, addr ERROR_OVERF, addr Mensaje, MB_OK\r\ninvoke ExitProcess, 0";
+
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
 
             result = "MOV AX," + field1.getLexema() + "\r\n" +
                     "ADD AX," + field2.getLexema() + "\r\n" +
+                    "JNO Label" + terceto.getIndex() + "\r\n" +
+                    error + "\r\n" +
+                    "Label" + terceto.getIndex() + ": \r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
-            int res = ((Integer) field1.getValue()) + ((Integer) field2.getValue());
-
-            // OVERFLOW
-            if (res > Integer.MAX_VALUE || res < Integer.MIN_VALUE)
-                result = "invoke MessageBox, NULL, addr ERROR!, addr INT_OVERFLOW : Sum Result, MB_OK\r\ninvoke ExitProcess, 0";
-            else
-                terceto.getVarAux().setValue(res);
-
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
-            result = "MOV EAX," + field1.getLexema() + "\r\n" +
-                    "ADD EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",EAX";
 
-            float res = ((Float) field1.getValue()) + ((Float) field2.getValue());
-
-            // OVERFLOW
-            if (res > Float.MAX_VALUE || res < Float.MIN_VALUE)
-                result = "invoke MessageBox, NULL, addr ERROR!, addr FLOAT_OVERFLOW : Sum Result, MB_OK\r\ninvoke ExitProcess, 0";
-            else
-                terceto.getVarAux().setValue(res);
+            result = "FLD " + field1.getLexema() + "\r\n" +
+                    "FSTP @f_a1" + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FSTP @f_a2" + "\r\n" +
+                    "FLD @f_a1" + "\r\n" +
+                    "FLD @f_a2" + "\r\n" +
+                    "FADD " + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema() +"\r\n" +
+                    "FLD " + terceto.getVarAux().getLexema() +"\r\n" + /****B*/
+                    "FLD @f_max" + "\r\n" +         /****A*/
+                    "FCOMPP"  + "\r\n" +
+                    "FSTSW AX" + "\r\n" +
+                    "FFREE ST(0)"  + "\r\n" +
+                    "FFREE ST(1)"  + "\r\n" +
+                    "FWAIT"  + "\r\n" +
+                    "SAHF"  + "\r\n" +
+                    "JNBE Label_add1" + terceto.getIndex() + "\r\n" + /****B <= A*/
+                    error + "\r\n" +
+                    "Label_add1" + terceto.getIndex() + ":";
         }
         return result;
     }
@@ -309,18 +367,17 @@ public class AssemblerGenerator {
     public String generateAsig(Terceto terceto) {
 
         String result = "";
-        System.out.println("GenerateAsig terceto: " +terceto+"  "+field1+"  "+field2);
         field1.setValue(field2.getValue());
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
             result = "MOV AX," + field2.getLexema() + "\r\n" +
                     "MOV _" + field1.getLexema() + ",AX" + "\r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",_" + field1.getLexema();
-
-
+                    "MOV " + terceto.getVarAux().getLexema() + ",AX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
-            result = "MOV EAX," + field2.getLexema() + "\r\n" +
-                    "MOV " + field1.getLexema() + ",EAX";
+            result = "FLD " + field2.getLexema() + "\r\n" +
+                    "FSTP _" + field1.getLexema() + "\r\n" +
+                    "FLD " + field2.getLexema() + "\r\n" +
+                    "FSTP " + terceto.getVarAux().getLexema();
         }
         terceto.getVarAux().setValue(field2.getValue());
         return result;
@@ -339,14 +396,16 @@ public class AssemblerGenerator {
 
             field1 = tercetos.get(pos).getVarAux();
             field2 = terceto.getField2();
-        } else if (caso == 2) {
+        }
+        else if (caso == 2) {
 
             field1 = terceto.getField1();
             aux = terceto.getField2().getLexema();
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
             field2 = tercetos.get(pos).getVarAux();
-        } else if (caso == 3) {
+        }
+        else if (caso == 3) {
 
             aux = terceto.getField1().getLexema();
             aux = aux.substring(1, aux.length() - 1);
@@ -359,11 +418,11 @@ public class AssemblerGenerator {
             pos = Integer.valueOf(aux);
 
             field2 = tercetos.get(pos).getVarAux();
-        } else if (caso == 4) {
+        }
+        else if (caso == 4) {
 
             field1 = terceto.getField1();
             field2 = terceto.getField2();
-            System.out.println("Entra al caso 4 con:" + terceto);
         }
     }
 

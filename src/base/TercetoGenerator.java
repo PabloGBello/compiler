@@ -25,7 +25,7 @@ public class TercetoGenerator {
     private Data Aptr = null;
     private Data IDptr = null;
     private int indexDO = -1;
-
+    public List<Data> pilaGramatica = new ArrayList<>();
     private SymbolTable ST;
 
     /* Variables necesarias para identificar el primer terceto de un bloque - usado para DO UNTIL*/
@@ -151,9 +151,11 @@ public class TercetoGenerator {
             tercetos.get(pila.remove(0)).setField2(new Data("-", ((Integer) Constants.OTHER).toString()));
         }
     }
-
-    public void tercetoI_F(Data field){
-        if(Integer.valueOf(field.getType()) == Constants.INT) {
+    /**
+     (I_F, a, -)
+     **/
+    public Data tercetoI_F(Data field){
+        //if(Integer.valueOf(field.getType()) == Constants.INT) {
             Terceto aux = new Terceto();
             aux.setIndex(indexTerceto);
             Data op = new Data("I_F", String.valueOf(Constants.I_F));
@@ -166,18 +168,16 @@ public class TercetoGenerator {
             aux.setType(String.valueOf(Constants.FLOAT));
             Data info = new Data("@aux" + aux.getIndex(),aux.getType());
             aux.setVarAux(info);
-
             ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
             tercetos.put(indexTerceto, aux);
             indexTerceto++;
-            this.setFptr(new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO)));
-        }else {
-            this.setFptr(field);
-        }
+            Data aux2 = new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO));
+            aux2.setCode(Constants.PUN_TERCETO);
+            return aux2;
+        //}
     }
 
     public Data createTerceto(String operator, Data field1, Data field2){
-
         if (!primerSentBloque){
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
@@ -199,8 +199,19 @@ public class TercetoGenerator {
         else
             aux2 = field2;
 
-        int typeTerceto1 = whatType(aux1);
+
+
         int typeTerceto2 = whatType(aux2);
+
+        if(operator.equals("=") && field1.getType() == null) {
+            field1.setType(String.valueOf(Constants.OTHER));
+        }
+
+        int typeTerceto1 = whatType(aux1);
+
+
+
+
 
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
 
@@ -210,29 +221,47 @@ public class TercetoGenerator {
         else {
             aux.setType(String.valueOf(type));
         }
-
         aux.setField1(aux1);
         aux.setField2(aux2);
-
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
-
+        data.setCode(Constants.PUN_TERCETO);
         // Variable auxiliar asociada a cada terceto.
         Data info = new Data("@aux" + aux.getIndex(),aux.getType());
         aux.setVarAux(info);
-
         // Se añade la variable auxiliar a la tabla de simbolos.
         ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
-
         tercetos.put(indexTerceto, aux);
         indexTerceto++;
         return data;
     }
 
+    public void  tercetoLET(){
+
+        System.out.println("------LET");
+
+        //Obtengo el indice del terceto
+        String lexA = this.getAptr().getLexema();
+        int i = Integer.valueOf(lexA.substring(1, lexA.length() - 1));
+
+        //El lexema para buscarlo en la TS
+        String lexema = this.tercetos.get(i).field1.getLexema();
+
+        //Obtengo el tipo de la expresion: tipo a inferir en el LET
+        String tipoE = this.getEptr().getType();
+
+        System.out.println("lexema a tipar: " + lexema);
+        System.out.println("tipo a inferir: " + tipoE);
+
+        ST.setType(lexema, tipoE);
+
+        System.out.println("------LET");
+    }
+
+
     /**Si es ID --> devuelve el terceto en el cual sufrio la ultima actualizacion, si fue actualizada.
      * Si es una CTE devuelve la misma
      * De lo contrario solo devueelve una referencia al terceto anterior*/
     public Data lastDeclaration(Data field){
-
         if(field.getCode() == Constants.ID) {
             for (int i = tercetos.size(); i > 0; i--) {
                 if (tercetos.get(i).getField1().getLexema().equals(field.getLexema())

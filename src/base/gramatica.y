@@ -62,7 +62,7 @@ import java.util.*;
 
 %%
 
-prog : programa                                                   {tg.showTercetos();}
+prog : programa                                                             {tg.showTercetos();}
 
 ;
 
@@ -84,15 +84,15 @@ sentencia : declarativa
 
 
 
-declarativa : decl ':' tipo'.'                                  {declarar(((Data)$3.obj).getLexema());}
+declarativa : decl ':' tipo'.'                                              {declarar(((Data)$3.obj).getLexema());}
 
 ;
 
 
 
-decl : decl ',' ID                                              {aDeclarar.add(((Data)$3.obj).getLexema());}
+decl : decl ',' ID                                                          {aDeclarar.add(((Data)$3.obj).getLexema());}
 
-     | ID                                                       {aDeclarar.add(((Data)$1.obj).getLexema());}
+     | ID                                                                   {aDeclarar.add(((Data)$1.obj).getLexema());}
 
 ;
 
@@ -112,7 +112,7 @@ ejecutable : seleccion
 
            | asignacion
 
-           | OUT '(' CADENA ')''.'                                       {tg.tercetoOUT((Data)$3.obj);}                              
+           | OUT '(' CADENA ')''.'                                          {tg.tercetoOUT((Data)$3.obj);}
 
            | LET asignacion                                             
 
@@ -124,33 +124,33 @@ ejecutable : seleccion
 
 
 
-seleccion : IF '(' cond_if ')' cpo_if                                   {tg.tercetoDesapilar(0);
-                                                                        tg.tercetoLabel();}
+seleccion : IF '(' cond_if ')' cpo_if                                       {tg.tercetoDesapilar(0);
+                                                                            tg.tercetoLabel();}
 
-          | IF error END_IF                                             {yynotify(1, "Estructura IF incorrecta");}
-
-;
-
-
-
-cond_if : condicion 	                                                  {tg.tercetoIncompleto("BF");}
+          | IF error END_IF                                                 {yynotify(1, "Estructura IF incorrecta");}
 
 ;
 
 
 
-cpo_if : THEN cpo_then ELSE cpo_else END_IF                             {yynotify(2, "Estructura IF correcta.");}
-
-       | THEN cpo_then END_IF                                           {yynotify(2, "Estructura IF correcta.");}
+cond_if : condicion 	                                                    {tg.tercetoIncompleto("BF");}
 
 ;
 
 
 
-cpo_then : bloque                                                       {tg.tercetoDesapilar(1);
+cpo_if : THEN cpo_then ELSE cpo_else END_IF                                 {yynotify(2, "Estructura IF correcta.");}
 
-                                                                        tg.tercetoIncompleto("BI");
-                                                                        tg.tercetoLabel();}
+       | THEN cpo_then END_IF                                               {yynotify(2, "Estructura IF correcta.");}
+
+;
+
+
+
+cpo_then : bloque                                                           {tg.tercetoDesapilar(1);
+
+                                                                            tg.tercetoIncompleto("BI");
+                                                                            tg.tercetoLabel();}
 
 ;
 
@@ -162,7 +162,7 @@ cpo_else : bloque
 
 
 
-condicion : expresion op expresion                                       {tg.createTerceto(((Data)$2.obj).getLexema(), (Data)$1.obj, (Data)$3.obj);}
+condicion : expresion op expresion                                          {tg.createTerceto(((Data)$2.obj).getLexema(), (Data)$1.obj, (Data)$3.obj);}
 
 ;
 
@@ -183,29 +183,28 @@ op : COMP_DISTINTO
 ;
 
 
-
 /*--DO-UNTIL--*/
 
 
 
 iteracion : DO_IND cpo_until
 
-          | DO_IND error '.'                                                 {yynotify(1, "Estructura UNTIL incorrecta.");}
+          | DO_IND error '.'                                                {yynotify(1, "Estructura UNTIL incorrecta.");}
 
 ;
 
 
 
-DO_IND    : DO                                                            {tg.setIndexDO();
-                                                                          tg.tercetoLabel();}
+DO_IND    : DO                                                              {tg.setIndexDO();
+                                                                            tg.tercetoLabel();}
 
 ;
 
 
 
-cpo_until : bloque UNTIL '(' cond_until ')''.'                           {tg.tercetoIteration("BF");
+cpo_until : bloque UNTIL '(' cond_until ')''.'                              {tg.tercetoIteration("BF");
 
-                                                                          yynotify(2, "Estructura UNTIL correcta.");}
+                                                                            yynotify(2, "Estructura UNTIL correcta.");}
 
 ;
 
@@ -221,11 +220,11 @@ cond_until : condicion
 
 
 
-asignacion : ID '=' expresion'.'                                          {tg.setAptr(tg.createTerceto("=", (Data)$1.obj, tg.getEptr()));}
+asignacion : ID '=' expresion'.'                                            {tg.setAptr(tg.createTerceto("=", (Data)$1.obj, tg.getEptr()));}
 
 
 
-           | ID error expresion'.'                                        {yynotify(1, "Asignacion incorrecta.");}
+           | ID error expresion'.'                                          {yynotify(1, "Asignacion incorrecta.");}
 
 ;
 
@@ -233,7 +232,7 @@ asignacion : ID '=' expresion'.'                                          {tg.se
 
 bloque : BEGIN grupo_de_sentencias END
 
-       | BEGIN error END                                                  {yynotify(1, "Error en bloque.");}
+       | BEGIN error END                                                    {yynotify(1, "Error en bloque.");}
 
 ;
 
@@ -245,52 +244,40 @@ grupo_de_sentencias : ejecutable
 
 ;
 
+expresion : expresion_a '+' termino                                         {tg.setEptr(tg.createTerceto("+", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getTptr()));}
 
+            | expresion_a '-' termino                                       {tg.setEptr(tg.createTerceto("-", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getTptr()));}
 
-expresion : expresion_s                                            
-
-
-;                                                 
-
-
-
-expresion_s : expresion_s '+' termino                                     {tg.setEptr(tg.createTerceto("+", tg.getEptr(), tg.getTptr()));}
-
-            | expresion_s '-' termino                                     {tg.setEptr(tg.createTerceto("-", tg.getEptr(), tg.getTptr()));}
-
-            | termino                                                     {tg.setEptr(tg.getTptr());}
+            | termino                                                       {tg.setEptr(tg.getTptr());}
 
 ;
 
+expresion_a : expresion                                                     {tg.pilaGramatica.add(tg.getEptr());}
+;
+termino_a : termino                                                         {tg.pilaGramatica.add(tg.getTptr());}
+;
 
+termino : termino_a '*' factor                                              {tg.setTptr(tg.createTerceto("*", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getFptr()));}
 
-termino : termino '*' factor                                              {tg.setTptr(tg.createTerceto("*", tg.getTptr(), tg.getFptr()));}
+        | termino_a '/' factor                                              {tg.setTptr(tg.createTerceto("/", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getFptr()));}
 
-        | termino '/' factor                                              {tg.setTptr(tg.createTerceto("/", tg.getTptr(), tg.getFptr()));}
-
-        | factor                                                          {tg.setTptr(tg.getFptr());}
+        | factor                                                            {tg.setTptr(tg.getFptr());}
 
 ;
 
+factor : ID                                                                 {tg.setFptr(tg.lastDeclaration((Data)$1.obj));}
 
+       | CTE                                                                {tg.setFptr((Data)$1.obj);}
 
-factor : ID                                                               {tg.setFptr(tg.lastDeclaration((Data)$1.obj));}
+       | '-'CTE                                                             {addSymbol((Data)$2.obj);
 
-       | CTE                                                              {tg.setFptr((Data)$1.obj);}
+                                                                            tg.setFptr((Data)$2.obj);}
 
-       | '-'CTE                                                           {addSymbol((Data)$2.obj);
-
-                                                                          tg.setFptr((Data)$2.obj);}
-
-       | I_F'('expresion_s')'                                             {tg.tercetoI_F((Data)$3.obj);}                                                  
+       | I_F'('expresion')'                                                 {tg.setFptr(tg.tercetoI_F((Data)$3.obj));}
 
 ;
-
-
 
 %%
-
-
 
 LexicalAnalizer la;
 TercetoGenerator tg;
@@ -332,7 +319,7 @@ private void yynotify(int type, String mensaje){
         System.out.println(mensaje);
         String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje); //v.currentLine
         la.getCompilationOutput().write(s);
-    
+
 }
 
 public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
