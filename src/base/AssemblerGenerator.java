@@ -107,6 +107,7 @@ public class AssemblerGenerator {
 
         List<Data> declarations = ST.getSimbolos().get(Constants.ID);
         for (Data d : declarations) {
+            System.out.println("creeeeaaa: "+d);
             if (Integer.valueOf(d.getType()).equals(Constants.INT)) {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DW ?");

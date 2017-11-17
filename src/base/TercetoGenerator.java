@@ -198,8 +198,19 @@ public class TercetoGenerator {
         else
             aux2 = field2;
 
-        int typeTerceto1 = whatType(aux1);
+
+
         int typeTerceto2 = whatType(aux2);
+
+        if(operator.equals("=") && field1.getType() == null) {
+            field1.setType(String.valueOf(Constants.OTHER));
+        }
+
+        int typeTerceto1 = whatType(aux1);
+
+
+
+
 
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
 
@@ -222,6 +233,29 @@ public class TercetoGenerator {
         indexTerceto++;
         return data;
     }
+
+    public void  tercetoLET(){
+
+        System.out.println("------LET");
+
+        //Obtengo el indice del terceto
+        String lexA = this.getAptr().getLexema();
+        int i = Integer.valueOf(lexA.substring(1, lexA.length() - 1));
+
+        //El lexema para buscarlo en la TS
+        String lexema = this.tercetos.get(i).field1.getLexema();
+
+        //Obtengo el tipo de la expresion: tipo a inferir en el LET
+        String tipoE = this.getEptr().getType();
+
+        System.out.println("lexema a tipar: " + lexema);
+        System.out.println("tipo a inferir: " + tipoE);
+
+        ST.setType(lexema, tipoE);
+
+        System.out.println("------LET");
+    }
+
 
     /**Si es ID --> devuelve el terceto en el cual sufrio la ultima actualizacion, si fue actualizada.
      * Si es una CTE devuelve la misma
