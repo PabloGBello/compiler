@@ -112,7 +112,7 @@ ejecutable : seleccion
 
            | asignacion
 
-           | OUT '(' CADENA ')''.'                                       {tercetoOUT((Data)$3.obj);}                              
+           | OUT '(' CADENA ')''.'                                       {tg.tercetoOUT((Data)$3.obj);}                              
 
            | LET asignacion
 
@@ -245,34 +245,26 @@ grupo_de_sentencias : ejecutable
 
 ;
 
+expresion : expresion_a '+' termino                                     {tg.setEptr(tg.createTerceto("+", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getTptr()));}
 
+            | expresion_a '-' termino                                     {tg.setEptr(tg.createTerceto("-", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getTptr()));}
 
-expresion : expresion_s                                            
-
-
-;                                                 
-
-
-
-expresion_s : expresion_s '+' termino                                     {tg.setEptr(tg.createTerceto("+", tg.getEptr(), tg.getTptr()));}
-
-            | expresion_s '-' termino                                     {tg.setEptr(tg.createTerceto("-", tg.getEptr(), tg.getTptr()));}
-
-            | termino                                                     {tg.setEptr(tg.getTptr());}
+            | termino                                                   {tg.setEptr(tg.getTptr());}
 
 ;
 
+expresion_a : expresion                                                     {tg.pilaGramatica.add(tg.getEptr());}
+;
+termino_a : termino                                                         {tg.pilaGramatica.add(tg.getTptr());}
+;
 
+termino : termino_a '*' factor                                              {tg.setTptr(tg.createTerceto("*", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getFptr()));}
 
-termino : termino '*' factor                                              {tg.setTptr(tg.createTerceto("*", tg.getTptr(), tg.getFptr()));}
-
-        | termino '/' factor                                              {tg.setTptr(tg.createTerceto("/", tg.getTptr(), tg.getFptr()));}
+        | termino_a '/' factor                                              {tg.setTptr(tg.createTerceto("/", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getFptr()));}
 
         | factor                                                          {tg.setTptr(tg.getFptr());}
 
 ;
-
-
 
 factor : ID                                                               {tg.setFptr(tg.lastDeclaration((Data)$1.obj));}
 
@@ -282,15 +274,11 @@ factor : ID                                                               {tg.se
 
                                                                           tg.setFptr((Data)$2.obj);}
 
-       | I_F'('expresion_s')'                                             {tg.tercetoI_F((Data)$3.obj);}                                                  
+       | I_F'('expresion')'                                             {tg.tercetoI_F((Data)$3.obj);}
 
 ;
 
-
-
 %%
-
-
 
 LexicalAnalizer la;
 TercetoGenerator tg;
@@ -332,7 +320,7 @@ private void yynotify(int type, String mensaje){
         System.out.println(mensaje);
         String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje); //v.currentLine
         la.getCompilationOutput().write(s);
-    
+
 }
 
 public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
@@ -355,4 +343,3 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-

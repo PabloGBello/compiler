@@ -39,8 +39,6 @@ public class AssemblerGenerator {
     }
 
     public void generate() {
-        System.out.println(HEAD);
-
         assemblerCode.write(HEAD);
         generateDeclarations();
         assemblerCode.write(".CODE\r\nSTART:");
@@ -108,7 +106,7 @@ public class AssemblerGenerator {
     public void generateDeclarations() {
 
         List<Data> declarations = ST.getSimbolos().get(Constants.ID);
-        for (Data d : declarations)
+        for (Data d : declarations) {
             if (Integer.valueOf(d.getType()).equals(Constants.INT)) {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DW ?");
@@ -120,6 +118,7 @@ public class AssemblerGenerator {
                 else
                     assemblerCode.write("_" + d.getLexema() + " DQ ?");
             }
+        }
         declarations.clear();
         declarations = ST.getSimbolos().get(Constants.CADENA);
         int cont = 1;
@@ -143,7 +142,7 @@ public class AssemblerGenerator {
                 d.setLexema(auxF);
 
                 if(contFloat == 1){
-                    assemblerCode.write("@f_max " + "DQ 3.40e38");
+                    assemblerCode.write("@f_max " + "DQ 3.40282347e38");
                     assemblerCode.write("@f_min " + "DQ 1.18e-38");
                     assemblerCode.write("@f_a1"  + " DQ ?");
                     assemblerCode.write("@f_a2"  + " DQ ?");
@@ -224,7 +223,6 @@ public class AssemblerGenerator {
     }
 
     public String generateMult(Terceto terceto) {
-        System.out.println("Crea multiplicacion con: "+terceto);
         String result = "";
 
         String error = "invoke MessageBox, NULL, addr ERROR_OVERF, addr Mensaje, MB_OK\r\ninvoke ExitProcess, 0";
@@ -394,7 +392,6 @@ public class AssemblerGenerator {
     public String generateAsig(Terceto terceto) {
 
         String result = "";
-        System.out.println("GenerateAsig terceto: " +terceto+"  "+field1+"  "+field2);
         field1.setValue(field2.getValue());
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
@@ -448,7 +445,6 @@ public class AssemblerGenerator {
 
             field1 = terceto.getField1();
             field2 = terceto.getField2();
-            System.out.println("Entra al caso 4 con:" + terceto);
         }
     }
 
