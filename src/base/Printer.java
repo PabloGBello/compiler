@@ -18,24 +18,24 @@ public class Printer {
                 l = "[LEXICO] ";
                 break;
             case 1:
-                l = "[SINTACTICO] ";
+                l = "[SINTAXIS] ";
                 break;
             case 2:
-                l = "[SEMANTICO] ";
+                l = "[SEMANTICA] ";
                 break;
         }
         switch(type){
             case 0:
-                t = "WARNING";
+                t = "[ADVERTENCIA] ";
             break;
             case 1:
-                t = "ERROR";
+                t = "[ERROR] ";
             break;
             case 2:
-                t = "MENSAJE";
+                t = "[MENSAJE] ";
             break;
         }
-        return (l + t + ": " + msg + " en linea " + line);
+        return (t + l + ": " + msg + " en linea " + line);
     }
 
 }

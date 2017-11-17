@@ -30,8 +30,8 @@ public class AssemblerGenerator {
     public AssemblerGenerator(SymbolTable ST, String path) {
         tercetos = null;
         this.ST = ST;
-        assemblerCode = new FileHandler(1, path, "AssemblerCode.asm");
-        tercetosCode = new FileHandler(1, path, "tercetosCode.txt");
+        assemblerCode = new FileHandler(1, path, "ASSEMBLER.asm");
+        tercetosCode = new FileHandler(1, path, "TL_DUMP.txt");
     }
 
     public void setTercetos(Hashtable<Integer, Terceto> tercetos) {
@@ -49,7 +49,7 @@ public class AssemblerGenerator {
 
             Terceto terceto = tercetos.get(index);
             tercetosCode.write(terceto.toString());
-            String codeAssembler = "";
+            String codeAssembler;
             String operator = terceto.getOperator().getLexema();
             String operatorAux = "";
 
@@ -112,7 +112,8 @@ public class AssemblerGenerator {
                     assemblerCode.write( d.getLexema() + " DW ?");
                 else
                     assemblerCode.write("_" + d.getLexema() + " DW ?");
-            }else {
+            }
+            else {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write( d.getLexema() + " DD ?");
                 else

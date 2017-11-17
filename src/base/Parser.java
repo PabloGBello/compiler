@@ -457,8 +457,7 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-
-//#line 390 "Parser.java"
+//#line 389 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -733,7 +732,7 @@ case 51:
 //#line 285 "gramatica.y"
 {tg.tercetoI_F((Data)val_peek(1).obj);}
 break;
-//#line 660 "Parser.java"
+//#line 659 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

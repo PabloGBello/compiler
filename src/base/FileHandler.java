@@ -2,6 +2,7 @@ package base;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class FileHandler {
 
@@ -82,21 +83,78 @@ public class FileHandler {
      * Vuelca contenido de la TS en un archivo
      **/
     public void dumpST(SymbolTable ST){
+
+        Set<Integer> keys = ST.getSimbolos().keySet();
+
         try {
-            writer.write("TOKEN: LEXEMA");
-            writer.write(" \r\n");
-            for(Integer i : ST.getSimbolos().keySet()) {
-                writer.write(i + ": ");
-                for (Data d : ST.getSimbolos().get(i)) {
-                    writer.write(d.getLexema()+" ");
-                }
-                writer.write(" \r\n");
-            }
+            this.writeKeys(keys, ST);
             writer.close();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeKeys(Set<Integer> s, SymbolTable ST){
+        String title;
+
+        try {
+            writer.write("\n------------------------------------------------------------\n");
+            writer.write("-- TABLA DE SÍMBOLOS - CONTENIDO --\n\n");
+            writer.write("-- FORMATO IDENTIFICADORES: [ <lexema>, <numero>, <tipo>, <valor> ]\n");
+            writer.write("-- PR: PALABRA RESERVADA\n");
+            writer.write("------------------------------------------------------------\n\n");
+
+            for(Integer i : s) {
+                switch(i){
+                    case 276:
+                        title = "CADENAS";
+                        break;
+                    case 275:
+                        title = "CONSTANTES";
+                        break;
+                    case 274:
+                        title = "IDENTIFICADORES";
+                        break;
+                    case 273 | 272 | 271 | 270:
+                        title = "COMPARADORES";
+                        break;
+                    default:
+                        title = "PR";
+                        break;
+                }
+                writer.write(title + ": ");
+                this.writeData(i, ST);
+                writer.write("\r\n");
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void writeData(Integer i, SymbolTable ST){
+        String txt;
+        try {
+            for (Data d : ST.getSimbolos().get(i)) {
+                if (i == 274) {
+                    txt = "[ " + d.getLexema()
+                            + ", " + d.getNumero()
+                            + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
+                            + ", " + d.getValue()
+                            +  " ] ";
+                }
+                else{
+                    txt = d.getLexema() + " ";
+                }
+                writer.write(txt);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void closeWriter(){

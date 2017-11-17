@@ -37,10 +37,10 @@ public class LexicalAnalizer {
         //Instanciamos el manejador de archivo para volcado de la TS
         STOutput = new FileHandler(1, dir, "ST_DUMP.txt");
 
+        detectedTokens = new FileHandler(1, dir, "TOKENS_DUMP.txt");
+
         // CREAMOS LA TABLA DE SIMBOLOS
         ST = new SymbolTable(compilationOutput);
-
-        detectedTokens = new FileHandler(1, dir, "tokensDetectados.txt");
 
         // CARGAMOS TRANSICIONES Y A.S.
         this.loadStates();

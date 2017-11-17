@@ -142,23 +142,6 @@ public class SymbolTable {
         return null;
     }
 
-    /*
-    public void setType(String lex, String type){
-
-        List<Data> aux = simbolos.get(Constants.ID);
-        for (Data var : aux){
-            if (lex.equals(var.getLexema())) {
-                if(type.equals("INT"))
-                    var.setType(String.valueOf(Constants.INT));
-                if(type.equals("FLOAT"))
-                    var.setType(String.valueOf(Constants.FLOAT));
-                if(type.equals("STRING"))
-                    var.setType(String.valueOf(Constants.CADENA));
-            }
-        }
-    }
-    */
-
     public void setType(String lex, String type) {
 
         List<Data> lista = simbolos.get(Constants.ID);
@@ -184,12 +167,18 @@ public class SymbolTable {
                 else {
                     //Variable existe
 
-                    if (item.getType().equals(this.getType(type))) {
+                    //if (item.getType().equals(this.getType(type))) {
+                    if (item.getType().equals(type)) {
                         //Variable en T.S. == tipo que la variable proxima a declarar: ERROR!
                         System.out.println("ERROR!!!! dos variables adyacentes declaradas con mismo tipo. Chau");
                         System.exit(1);
                     }
                     else {
+
+                        System.out.println("fue por aca... shadowing");
+                        System.out.println("tipo1: " + item.getType());
+                        System.out.println("tipo2: " + type);
+
                         //Variable en T.S. <> tipo que la variable proxima a declarar: SHADOWING
                         this.addSymbol(Constants.ID, lex, type, item.getNumero() + 1);
                     }
@@ -251,7 +240,7 @@ public class SymbolTable {
     }
 
     // Para no andar reiterando arriba en el setType
-    private String getType(String type) {
+    public String getType(String type) {
         if (type.equals("INT"))
             return String.valueOf(Constants.INT);
         if (type.equals("FLOAT"))
@@ -259,5 +248,17 @@ public class SymbolTable {
         if (type.equals("STRING"))
             return String.valueOf(Constants.CADENA);
         return null;
+    }
+
+    public String getTypeReverse(Integer type) {
+        switch(type){
+            case 267:
+                return "FLOAT";
+            case 268:
+                return "INT";
+            case 276:
+                return "CADENA";
+        }
+        return "";
     }
 }

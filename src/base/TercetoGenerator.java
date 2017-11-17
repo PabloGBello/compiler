@@ -15,7 +15,7 @@ public class TercetoGenerator {
     boolean crear = true;
     boolean expresionClosed = false;
     int flagOpAnt  = -1;
-    List<Integer>  pila =  new ArrayList<>();
+    List<Integer>  pila =  new ArrayList();
     Conversions conversions = new Conversions();
 
     private Data Fptr = null;
@@ -187,6 +187,7 @@ public class TercetoGenerator {
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
+
         if(operator.equals("=")) {
             aux1 = field1;
         } else {
@@ -247,6 +248,7 @@ public class TercetoGenerator {
         return new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO));
     }
     private int whatType(Data field){
+        System.out.println("wt: " + field);
         if(!field.getLexema().equals("BF") && !field.getLexema().equals("BI")) {
             int index;
             if (Integer.valueOf(field.getType()) == Constants.PUN_TERCETO) {
@@ -258,6 +260,7 @@ public class TercetoGenerator {
                 }
             }
         }
+
         return Integer.valueOf(field.getType());
     }
 

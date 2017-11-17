@@ -112,9 +112,9 @@ ejecutable : seleccion
 
            | asignacion
 
-           | OUT '(' CADENA ')''.'                                       {tercetoOUT((Data)$3.obj);}                              
+           | OUT '(' CADENA ')''.'                                       {tg.tercetoOUT((Data)$3.obj);}                              
 
-           | LET asignacion
+           | LET asignacion                                             
 
 ;
 
@@ -355,4 +355,3 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-
