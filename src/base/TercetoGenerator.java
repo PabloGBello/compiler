@@ -241,16 +241,15 @@ public class TercetoGenerator {
         String lexA = this.getAptr().getLexema();
         int i = Integer.valueOf(lexA.substring(1, lexA.length() - 1));
 
-        //El lexema para buscarlo en la TS
-        String lexema = this.tercetos.get(i).field1.getLexema();
-
         //Obtengo el tipo de la expresion: tipo a inferir en el LET
         String tipoE = this.getEptr().getType();
 
-        System.out.println("lexema a tipar: " + lexema);
-        System.out.println("tipo a inferir: " + tipoE);
+        //El lexema para buscarlo en la TS
+        //String lexema = this.tercetos.get(i).field1.getLexema();
 
-        ST.setType(lexema, tipoE);
+        this.tercetos.get(i).field1.setType(tipoE);
+
+        //ST.setType(lexema, tipoE);
 
         System.out.println("------LET");
     }
