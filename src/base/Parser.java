@@ -632,6 +632,10 @@ case 14:
 //#line 115 "gramatica.y"
 {tg.tercetoOUT((Data)val_peek(2).obj);}
 break;
+case 15:
+//#line 117 "gramatica.y"
+{tg.tercetoLET();}
+break;
 case 16:
 //#line 127 "gramatica.y"
 {tg.tercetoDesapilar(0);
@@ -741,7 +745,7 @@ case 52:
 //#line 276 "gramatica.y"
 {tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
-//#line 668 "Parser.java"
+//#line 672 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

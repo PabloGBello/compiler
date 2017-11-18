@@ -40,12 +40,18 @@ public class Conversions {
         asignacion.add(Constants.INT, Constants.INT, Constants.INT);
         asignacion.add(Constants.INT, Constants.FLOAT, -1);
         asignacion.add(Constants.INT, Constants.CADENA, -1);
+        asignacion.add(Constants.INT, Constants.OTHER, Constants.INT);
         asignacion.add(Constants.FLOAT, Constants.INT, -1);
         asignacion.add(Constants.FLOAT, Constants.FLOAT, Constants.FLOAT);
+        asignacion.add(Constants.FLOAT, Constants.OTHER, Constants.FLOAT);
         asignacion.add(Constants.FLOAT, Constants.CADENA, -1);
         asignacion.add(Constants.CADENA, Constants.INT, -1);
         asignacion.add(Constants.CADENA, Constants.FLOAT, -1);
+        asignacion.add(Constants.CADENA, Constants.OTHER, -1);
         asignacion.add(Constants.CADENA, Constants.CADENA, Constants.CADENA);
+        asignacion.add(Constants.OTHER, Constants.CADENA, -1);
+        asignacion.add(Constants.OTHER, Constants.FLOAT, Constants.FLOAT);
+        asignacion.add(Constants.OTHER, Constants.INT, Constants.INT);
 
         comparacion.add(Constants.INT, Constants.INT, Constants.INT);
         comparacion.add(Constants.INT, Constants.FLOAT, -1);

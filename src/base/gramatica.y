@@ -114,7 +114,7 @@ ejecutable : seleccion
 
            | OUT '(' CADENA ')''.'                                          {tg.tercetoOUT((Data)$3.obj);}
 
-           | LET asignacion                                             
+           | LET asignacion                                                 {tg.tercetoLET();}
 
 ;
 
