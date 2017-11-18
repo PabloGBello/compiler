@@ -323,17 +323,18 @@ private void yynotify(int type, String mensaje){
 public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         SymbolTable tab = la.getSymbolTable();
         int value = Integer.parseInt(field.getLexema()) * (-1);
-        //field.setLexema(String.valueOf(value));
         Data aux = tab.getData(field.getCode(), field.getLexema());
-        if(aux == null){
-            aux = new Data();
-            aux.setLexema(String.valueOf(value));
-            aux.setType(field.getType());
-            aux.setCode(field.getCode());
+        if(aux != null && aux.getLexema().equals(field.getLexema())) {
+            aux = tab.getData(field.getCode(), String.valueOf(value));
+            if (aux == null) {
+                aux = new Data();
+                aux.setLexema(String.valueOf(value));
+                aux.setType(field.getType());
+                aux.setCode(field.getCode());
+                tab.addData(aux);
+            }
         }
-        System.out.println("-----: "+ field.getType());
         return aux;
-        //tab.addSymbol(Integer.valueOf(CTE), String.valueOf(value));
 }
 
 public void declarar(String type){

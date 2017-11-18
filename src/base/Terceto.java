@@ -94,7 +94,11 @@ public class Terceto {
             aux = aux + field2.getLexema() + ") ";
         else
             aux += "  )";
-        return aux + "[ "+ SymbolTable.getTypeReverse(Integer.valueOf(type)) + " ]";
+        if(type != null)
+            aux += "[ "+ SymbolTable.getTypeReverse(Integer.valueOf(type)) + " ]";
+        else
+            aux += " no type ";
+        return  aux;
     }
 
 }

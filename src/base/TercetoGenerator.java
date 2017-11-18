@@ -17,7 +17,7 @@ public class TercetoGenerator {
     Conversions conversions = new Conversions();
 
     private Data Fptr = null;
-    private Data Eptr = null;
+    public static Data Eptr = null;
     private Data E_sptr = null;
     private Data Tptr = null;
     private Data Aptr = null;
@@ -179,6 +179,7 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
+        System.out.println("Crea terceto con: "+operator+" "+field1+" "+field2);
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
