@@ -1,5 +1,7 @@
 package base;
 
+import com.sun.org.apache.bcel.internal.generic.INEG;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -158,9 +160,10 @@ public class SymbolTable {
             // Coincide lexema: es la misma variable
             if (lexema.equals(lex)) {
                 stop = true;
-
-                if (item.getType() == null) {
+                //if (item.getType() == null || Integer.valueOf(item.getType()) == Constants.OTHER ){
+                if (item.getType() == null ) {
                     //Variable no fue declarada
+                    System.out.println("Entra por aca con: "+item);
                     item.setType(this.getType(type));
                     item.setNumero(0);
                 }

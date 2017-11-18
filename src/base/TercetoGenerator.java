@@ -167,7 +167,6 @@ public class TercetoGenerator {
             aux.setField2(new Data("-", String.valueOf(Constants.FLOAT)));
             aux.setType(String.valueOf(Constants.FLOAT));
             Data info = new Data("@aux" + aux.getIndex(),aux.getType());
-            aux.setVarAux(info);
             ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
             tercetos.put(indexTerceto, aux);
             indexTerceto++;
@@ -212,11 +211,11 @@ public class TercetoGenerator {
 
 
 
-
+        System.out.println("pide tipo de: " + operator + " " +typeTerceto1+ " "+typeTerceto2);
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
 
         if( type == -1) {
-            System.out.println("Terceto: " + indexTerceto + " Incompatibilidad de tipos: " + typeTerceto1 + " y " + typeTerceto2);
+            System.out.println("Terceto: " + indexTerceto + " Incompatibilidad de tipos: " + aux1 + " y " + aux2);
         }
         else {
             aux.setType(String.valueOf(type));
@@ -227,7 +226,10 @@ public class TercetoGenerator {
         data.setCode(Constants.PUN_TERCETO);
         // Variable auxiliar asociada a cada terceto.
         Data info = new Data("@aux" + aux.getIndex(),aux.getType());
+        info.setCode(data.getCode());
+        System.out.println("crea esta basura: " + info +" teniendo " + aux);
         aux.setVarAux(info);
+
         // Se añade la variable auxiliar a la tabla de simbolos.
         ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
         tercetos.put(indexTerceto, aux);
@@ -278,7 +280,7 @@ public class TercetoGenerator {
     }
     private int whatType(Data field){
         System.out.println("wt: " + field);
-        if(!field.getLexema().equals("BF") && !field.getLexema().equals("BI")) {
+        if(!field.getLexema().equals("BF") && !field.getLexema().equals("BI") && Integer.valueOf(field.getType()) != Constants.OTHER) {
             int index;
             if (Integer.valueOf(field.getType()) == Constants.PUN_TERCETO) {
                 index = Integer.valueOf(field.getLexema().substring(1, field.getLexema().length() - 1));

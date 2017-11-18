@@ -139,6 +139,7 @@ public class FileHandler {
         try {
             for (Data d : ST.getSimbolos().get(i)) {
                 if (i == 274) {
+                    System.out.println("mierda:"+ d);
                     txt = "[ " + d.getLexema()
                             + ", " + d.getNumero()
                             + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
