@@ -439,10 +439,8 @@ private void yynotify(int type, String mensaje){
 }
 
 public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
-        SymbolTable tab = la.getSymbolTable();
         int value = Integer.parseInt(field.getLexema()) * (-1);
-        field.setLexema(String.valueOf(value));
-        tab.addSymbol(Integer.valueOf(CTE), String.valueOf(value));
+        la.getSymbolTable().getData(Constants.CTE, la.getSymbolTable().getPosition(field.getLexema())).setLexema(String.valueOf(value));
 }
 
 public void declarar(String type){
@@ -729,7 +727,7 @@ case 48:
 break;
 case 49:
 //#line 268 "gramatica.y"
-{tg.setFptr(tg.lastDeclaration((Data)val_peek(0).obj));}
+{tg.setFptr((Data)val_peek(0).obj);}
 break;
 case 50:
 //#line 270 "gramatica.y"

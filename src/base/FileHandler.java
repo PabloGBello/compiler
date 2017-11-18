@@ -148,6 +148,7 @@ public class FileHandler {
                             +  " ] ";
                 }
                 else if (i == 275) {
+                    System.out.println("error impresion : "+d);
                     txt = "[ " + d.getLexema()
                             + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
                             +  " ] ";

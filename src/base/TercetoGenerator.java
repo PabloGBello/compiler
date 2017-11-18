@@ -1,5 +1,7 @@
 package base;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import java.util.*;
 
 public class TercetoGenerator {
@@ -177,17 +179,20 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
-
+        System.out.println("Entra a crear terceto: "+operator+" "+field1+" "+field2);
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
 
         if(operator.equals("=")) {
+            System.out.println("Entra a la asignacion then: "+field1);
             aux1 = field1;
         }
         else {
+            System.out.println("Entra a la asignacion else: "+field1);
             aux1 = this.lastDeclaration(field1);
+
         }
 
         if(field2.getCode() == Constants.ID) {
@@ -212,7 +217,13 @@ public class TercetoGenerator {
             System.out.println("Terceto: " + indexTerceto + " Incompatibilidad de tipos: " + aux1 + " y " + aux2);
         }
         else {
-            aux.setType(String.valueOf(type));
+            /*if(Integer.valueOf(field1.getType()) == Constants.OTHER) {
+                aux.setType(String.valueOf(Constants.OTHER));
+                System.out.println("entra a asignar el tipo: " + field1+ " " +aux);
+            }
+            else*/
+                aux.setType(String.valueOf(type));
+
         }
         aux.setField1(aux1);
         aux.setField2(aux2);

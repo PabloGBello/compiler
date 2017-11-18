@@ -265,7 +265,7 @@ termino : termino_a '*' factor                                              {tg.
 
 ;
 
-factor : ID                                                                 {tg.setFptr(tg.lastDeclaration((Data)$1.obj));}
+factor : ID                                                                 {tg.setFptr((Data)$1.obj);}
 
        | CTE                                                                {tg.setFptr((Data)$1.obj);}
 
