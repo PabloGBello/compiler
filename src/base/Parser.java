@@ -393,7 +393,7 @@ final static String yyrule[] = {
 "factor : I_F '(' expresion ')'",
 };
 
-//#line 279 "gramatica.y"
+//#line 284 "gramatica.y"
 
 LexicalAnalizer la;
 TercetoGenerator tg;
@@ -432,11 +432,11 @@ private void yyerror(String msj){
 }
 
 private void yynotify(int type, String mensaje){
+        System.out.println(mensaje);
         String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje); //v.currentLine
         la.getCompilationOutput().write(s);
 
 }
-
 
 public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         SymbolTable tab = la.getSymbolTable();
@@ -468,7 +468,7 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-//#line 399 "Parser.java"
+//#line 400 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -695,65 +695,70 @@ case 33:
 break;
 case 35:
 //#line 223 "gramatica.y"
-{tg.setAptr(tg.createTerceto("=", (Data)val_peek(3).obj, tg.getEptr()));}
+{if(TercetoGenerator.AUXptr != null){
+                                                                                tg.setAptr(tg.createTerceto("=", TercetoGenerator.AUXptr, tg.getEptr()));
+                                                                                TercetoGenerator.AUXptr = null;
+                                                                            }
+                                                                            else
+                                                                                tg.setAptr(tg.createTerceto("=", ((Data)val_peek(3).obj), tg.getEptr()));}
 break;
 case 36:
-//#line 227 "gramatica.y"
+//#line 232 "gramatica.y"
 {yynotify(1, "Asignacion incorrecta.");}
 break;
 case 38:
-//#line 235 "gramatica.y"
+//#line 240 "gramatica.y"
 {yynotify(1, "Error en bloque.");}
 break;
 case 41:
-//#line 247 "gramatica.y"
+//#line 252 "gramatica.y"
 {tg.setEptr(tg.createTerceto("+", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getTptr()));}
 break;
 case 42:
-//#line 249 "gramatica.y"
+//#line 254 "gramatica.y"
 {tg.setEptr(tg.createTerceto("-", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getTptr()));}
 break;
 case 43:
-//#line 251 "gramatica.y"
+//#line 256 "gramatica.y"
 {tg.setEptr(tg.getTptr());}
 break;
 case 44:
-//#line 255 "gramatica.y"
+//#line 260 "gramatica.y"
 {tg.pilaGramatica.add(tg.getEptr());}
 break;
 case 45:
-//#line 257 "gramatica.y"
+//#line 262 "gramatica.y"
 {tg.pilaGramatica.add(tg.getTptr());}
 break;
 case 46:
-//#line 260 "gramatica.y"
+//#line 265 "gramatica.y"
 {tg.setTptr(tg.createTerceto("*", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getFptr()));}
 break;
 case 47:
-//#line 262 "gramatica.y"
+//#line 267 "gramatica.y"
 {tg.setTptr(tg.createTerceto("/", tg.pilaGramatica.remove(tg.pilaGramatica.size()-1), tg.getFptr()));}
 break;
 case 48:
-//#line 264 "gramatica.y"
+//#line 269 "gramatica.y"
 {tg.setTptr(tg.getFptr());}
 break;
 case 49:
-//#line 268 "gramatica.y"
+//#line 273 "gramatica.y"
 {tg.setFptr((Data)val_peek(0).obj);}
 break;
 case 50:
-//#line 270 "gramatica.y"
+//#line 275 "gramatica.y"
 {tg.setFptr((Data)val_peek(0).obj);}
 break;
 case 51:
-//#line 272 "gramatica.y"
+//#line 277 "gramatica.y"
 {tg.setFptr(addSymbol((Data)val_peek(0).obj));}
 break;
 case 52:
-//#line 274 "gramatica.y"
+//#line 279 "gramatica.y"
 {tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
-//#line 679 "Parser.java"
+//#line 685 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

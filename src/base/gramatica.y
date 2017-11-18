@@ -220,7 +220,12 @@ cond_until : condicion
 
 
 
-asignacion : ID '=' expresion'.'                                            {tg.setAptr(tg.createTerceto("=", (Data)$1.obj, tg.getEptr()));}
+asignacion : ID '=' expresion'.'                                            {if(TercetoGenerator.AUXptr != null){
+                                                                                tg.setAptr(tg.createTerceto("=", TercetoGenerator.AUXptr, tg.getEptr()));
+                                                                                TercetoGenerator.AUXptr = null;
+                                                                            }
+                                                                            else
+                                                                                tg.setAptr(tg.createTerceto("=", ((Data)val_peek(3).obj), tg.getEptr()));}
 
 
 

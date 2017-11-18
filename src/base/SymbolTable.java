@@ -177,8 +177,7 @@ public class SymbolTable {
                         System.out.println("fue por aca... shadowing");
                         //Variable en T.S. <> tipo que la variable proxima a declarar: SHADOWING
                         this.addSymbol(Constants.ID, lex, this.getType(type), item.getNumero() + 1);
-                        TercetoGenerator.Eptr = getData(Constants.ID, lex, this.getType(type));
-                        System.out.println("asigna al puntero: "+getData(Constants.ID, lex, this.getType(type)));
+                        TercetoGenerator.AUXptr = getData(Constants.ID, lex, this.getType(type));
                     }
 
                 }
@@ -230,10 +229,7 @@ public class SymbolTable {
     public Data getData(int key, String lexema, String type) {
         if (simbolos.containsKey(key)) {
             for(Data d: simbolos.get(key)){
-                System.out.println("ea: "+d);
-                System.out.println("comparado: "+ lexema +" "+type);
-                if (d.getLexema().equals(lexema) && Integer.valueOf(d.getType()) == Integer.valueOf(type)) {
-                    System.out.println("cvvc :");
+                if ((d.getLexema().equals(lexema)) && d.getType().equals(type)) {
                     return d;
                 }
             }

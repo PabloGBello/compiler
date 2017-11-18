@@ -21,7 +21,7 @@ public class TercetoGenerator {
     private Data E_sptr = null;
     private Data Tptr = null;
     private Data Aptr = null;
-    private Data IDptr = null;
+    public static Data AUXptr = null;
     private int indexDO = -1;
     public List<Data> pilaGramatica = new ArrayList<>();
     private SymbolTable ST;
@@ -72,14 +72,6 @@ public class TercetoGenerator {
 
     public void setAptr(Data aptr) {
         Aptr = aptr;
-    }
-
-    public Data getIDptr() {
-        return IDptr;
-    }
-
-    public void setIDptr(Data idptr) {
-        IDptr = idptr;
     }
 
     public TercetoGenerator(SymbolTable ST){
@@ -179,7 +171,6 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
-        System.out.println("Crea terceto con: "+operator+" "+field1+" "+field2);
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
