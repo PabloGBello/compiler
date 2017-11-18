@@ -185,16 +185,17 @@ public class TercetoGenerator {
 
         if(operator.equals("=")) {
             aux1 = field1;
-        } else {
+        }
+        else {
             aux1 = this.lastDeclaration(field1);
         }
 
-        if(field2.getCode() == Constants.ID)
+        if(field2.getCode() == Constants.ID) {
             aux2 = this.lastDeclaration(field2);
-        else
+        }
+        else {
             aux2 = field2;
-
-
+        }
 
         int typeTerceto2 = whatType(aux2);
 
@@ -204,10 +205,7 @@ public class TercetoGenerator {
 
         int typeTerceto1 = whatType(aux1);
 
-
-
-
-        System.out.println("pide tipo de: " + operator + " " +typeTerceto1+ " "+typeTerceto2);
+        System.out.println("pide tipo de " + operator + " " + typeTerceto1 +  " "+typeTerceto2);
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
 
         if( type == -1) {
@@ -234,24 +232,10 @@ public class TercetoGenerator {
     }
 
     public void  tercetoLET(){
-
-        System.out.println("------LET");
-
-        //Obtengo el indice del terceto
         String lexA = this.getAptr().getLexema();
         int i = Integer.valueOf(lexA.substring(1, lexA.length() - 1));
-
-        //Obtengo el tipo de la expresion: tipo a inferir en el LET
         String tipoE = this.getEptr().getType();
-
-        //El lexema para buscarlo en la TS
-        //String lexema = this.tercetos.get(i).field1.getLexema();
-
         this.tercetos.get(i).field1.setType(tipoE);
-
-        //ST.setType(lexema, tipoE);
-
-        System.out.println("------LET");
     }
 
 

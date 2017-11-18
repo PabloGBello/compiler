@@ -160,8 +160,7 @@ public class SymbolTable {
             // Coincide lexema: es la misma variable
             if (lexema.equals(lex)) {
                 stop = true;
-                //if (item.getType() == null || Integer.valueOf(item.getType()) == Constants.OTHER ){
-                if (item.getType() == null ) {
+                if (item.getType() == null) {
                     //Variable no fue declarada
                     System.out.println("Entra por aca con: "+item);
                     item.setType(this.getType(type));
@@ -169,9 +168,7 @@ public class SymbolTable {
                 }
                 else {
                     //Variable existe
-
-                    //if (item.getType().equals(this.getType(type))) {
-                    if (item.getType().equals(type)) {
+                    if (item.getType().equals(this.getType(type))) {
                         //Variable en T.S. == tipo que la variable proxima a declarar: ERROR!
                         System.out.println("ERROR!!!! dos variables adyacentes declaradas con mismo tipo. Chau");
                         System.exit(1);
@@ -179,11 +176,8 @@ public class SymbolTable {
                     else {
 
                         System.out.println("fue por aca... shadowing");
-                        System.out.println("tipo1: " + item.getType());
-                        System.out.println("tipo2: " + type);
-
                         //Variable en T.S. <> tipo que la variable proxima a declarar: SHADOWING
-                        this.addSymbol(Constants.ID, lex, type, item.getNumero() + 1);
+                        this.addSymbol(Constants.ID, lex, this.getType(type), item.getNumero() + 1);
                     }
 
                 }
