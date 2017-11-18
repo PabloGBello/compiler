@@ -393,7 +393,7 @@ final static String yyrule[] = {
 "factor : I_F '(' expresion ')'",
 };
 
-//#line 281 "gramatica.y"
+//#line 279 "gramatica.y"
 
 LexicalAnalizer la;
 TercetoGenerator tg;
@@ -437,11 +437,22 @@ private void yynotify(int type, String mensaje){
 
 }
 
-public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
 
-    System.out.println();
-    int value = Integer.parseInt(field.getLexema()) * (-1);
-    la.getSymbolTable().getData(Constants.CTE, la.getSymbolTable().getPosition(field.getLexema())).setLexema(String.valueOf(value));
+public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
+        SymbolTable tab = la.getSymbolTable();
+        int value = Integer.parseInt(field.getLexema()) * (-1);
+        Data aux = tab.getData(field.getCode(), field.getLexema());
+        if(aux != null && aux.getLexema().equals(field.getLexema())) {
+            aux = tab.getData(field.getCode(), String.valueOf(value));
+            if (aux == null) {
+                aux = new Data();
+                aux.setLexema(String.valueOf(value));
+                aux.setType(field.getType());
+                aux.setCode(field.getCode());
+                tab.addData(aux);
+            }
+        }
+        return aux;
 }
 
 public void declarar(String type){
@@ -457,7 +468,7 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-//#line 390 "Parser.java"
+//#line 399 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -736,15 +747,13 @@ case 50:
 break;
 case 51:
 //#line 272 "gramatica.y"
-{addSymbol((Data)val_peek(0).obj);
-
-                                                                            tg.setFptr((Data)val_peek(0).obj);}
+{tg.setFptr(addSymbol((Data)val_peek(0).obj));}
 break;
 case 52:
-//#line 276 "gramatica.y"
+//#line 274 "gramatica.y"
 {tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
-//#line 672 "Parser.java"
+//#line 679 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

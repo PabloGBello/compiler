@@ -269,9 +269,7 @@ factor : ID                                                                 {tg.
 
        | CTE                                                                {tg.setFptr((Data)$1.obj);}
 
-       | '-'CTE                                                             {addSymbol((Data)$2.obj);
-
-                                                                            tg.setFptr((Data)$2.obj);}
+       | '-'CTE                                                             {tg.setFptr(addSymbol((Data)$2.obj));}
 
        | I_F'('expresion')'                                                 {tg.setFptr(tg.tercetoI_F((Data)$3.obj));}
 
@@ -322,11 +320,20 @@ private void yynotify(int type, String mensaje){
 
 }
 
-public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
+public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         SymbolTable tab = la.getSymbolTable();
         int value = Integer.parseInt(field.getLexema()) * (-1);
-        field.setLexema(String.valueOf(value));
-        tab.addSymbol(Integer.valueOf(CTE), String.valueOf(value));
+        //field.setLexema(String.valueOf(value));
+        Data aux = tab.getData(field.getCode(), field.getLexema());
+        if(aux == null){
+            aux = new Data();
+            aux.setLexema(String.valueOf(value));
+            aux.setType(field.getType());
+            aux.setCode(field.getCode());
+        }
+        System.out.println("-----: "+ field.getType());
+        return aux;
+        //tab.addSymbol(Integer.valueOf(CTE), String.valueOf(value));
 }
 
 public void declarar(String type){

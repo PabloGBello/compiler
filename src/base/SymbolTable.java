@@ -56,7 +56,6 @@ public class SymbolTable {
         if(key == Constants.CADENA)
             data.setType(String.valueOf(key));
         simbolos.get(key).add(data);
-
     }
 
     public void addItem(Integer key, String value, String type) {
@@ -214,6 +213,19 @@ public class SymbolTable {
      * CAPAZ QUE SE PARECE A OTRO METODO CON +- FUNCIONALIDAD PERO SE
      * REFINA A LO ULTIMO TODO ES NECESARIO
      */
+
+    public Data getData(int key, String lexema) {
+        if (simbolos.containsKey(key)) {
+            for(Data d: simbolos.get(key)){
+                if (d.getLexema().equals(lexema))
+                    return d;
+            }
+        }
+        return null;
+    }
+    public void addData(Data data){
+        simbolos.get(data.getCode()).add(data);
+    }
 
     public Data getData(int key, int pos) {
         if (simbolos.containsKey(key)) {
