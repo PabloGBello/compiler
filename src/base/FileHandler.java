@@ -99,12 +99,12 @@ public class FileHandler {
         String title;
 
         try {
-            writer.write("\n------------------------------------------------------------\n");
-            writer.write("-- TABLA DE SÍMBOLOS: CONTENIDO --\n\n");
-            writer.write("-- FORMATO IDENTIFICADORES: [ <lexema>, <numero>, <tipo>, <valor> ]\n");
-            writer.write("-- FORMATO CONSTANTES: [ <lexema>, <tipo> ]\n");
-            writer.write("-- PR: PALABRA RESERVADA\n");
-            writer.write("------------------------------------------------------------\n\n");
+            writer.write("\n------------------------------------------------------------\r\n");
+            writer.write("-- TABLA DE SÍMBOLOS: CONTENIDO\r\n\r\n");
+            writer.write("-- FORMATO IDENTIFICADORES: [ <lexema>, <numero>, <tipo>, <valor> ]\r\n");
+            writer.write("-- FORMATO CONSTANTES: [ <lexema>, <tipo> ]\r\n");
+            writer.write("-- PR: PALABRA RESERVADA\r\n\r\n");
+            writer.write("------------------------------------------------------------\r\n\r\n\r\n");
 
             for(Integer i : s) {
                 switch(i){
@@ -140,17 +140,14 @@ public class FileHandler {
         try {
             for (Data d : ST.getSimbolos().get(i)) {
                 if (i == 274) {
-                    System.out.println("mierda:"+ d);
                     txt = "[ " + d.getLexema()
                             + ", " + d.getNumero()
-                            + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
-                            + ", " + d.getValue()
+                            + ", " + SymbolTable.getTypeReverse(Integer.valueOf(d.getType()))
                             +  " ] ";
                 }
                 else if (i == 275) {
-                    System.out.println("error impresion : "+d);
                     txt = "[ " + d.getLexema()
-                            + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
+                            + ", " + SymbolTable.getTypeReverse(Integer.valueOf(d.getType()))
                             +  " ] ";
                 }
                 else if (i == 276) {

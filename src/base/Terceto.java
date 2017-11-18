@@ -81,20 +81,20 @@ public class Terceto {
         //this.varAux.setType(type);
     }
     public String toString(){
-        String aux = "" + index+"-(";
+        String aux = index + ". (";
         if(operator != null)
-            aux = aux + operator.getLexema() + ",";
+            aux = aux + operator.getLexema() + ", ";
         else
             aux += "  ,";
         if(field1 != null)
-            aux = aux + field1.getLexema() + ",";
+            aux = aux + field1.getLexema() + ", ";
         else
             aux += "  ,";
         if(field2 != null)
-            aux = aux + field2.getLexema() + ")";
+            aux = aux + field2.getLexema() + ") ";
         else
             aux += "  )";
-        return aux + "- type: "+type;
+        return aux + "[ "+ SymbolTable.getTypeReverse(Integer.valueOf(type)) + " ]";
     }
 
 }

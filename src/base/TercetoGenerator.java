@@ -179,18 +179,15 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
-        System.out.println("Entra a crear terceto: "+operator+" "+field1+" "+field2);
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
 
         if(operator.equals("=")) {
-            System.out.println("Entra a la asignacion then: "+field1);
             aux1 = field1;
         }
         else {
-            System.out.println("Entra a la asignacion else: "+field1);
             aux1 = this.lastDeclaration(field1);
 
         }
@@ -210,7 +207,6 @@ public class TercetoGenerator {
 
         int typeTerceto1 = whatType(aux1);
 
-        System.out.println("pide tipo de " + operator + " " + typeTerceto1 +  " "+typeTerceto2);
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
 
         if( type == -1) {
@@ -232,7 +228,6 @@ public class TercetoGenerator {
         // Variable auxiliar asociada a cada terceto.
         Data info = new Data("@aux" + aux.getIndex(),aux.getType());
         info.setCode(data.getCode());
-        System.out.println("crea esta basura: " + info +" teniendo " + aux);
         aux.setVarAux(info);
 
         // Se añade la variable auxiliar a la tabla de simbolos.
@@ -269,7 +264,6 @@ public class TercetoGenerator {
         return new Data("["+String.valueOf(indexTerceto-1)+"]", String.valueOf(Constants.PUN_TERCETO));
     }
     private int whatType(Data field){
-        System.out.println("wt: " + field);
         if(!field.getLexema().equals("BF") && !field.getLexema().equals("BI") && Integer.valueOf(field.getType()) != Constants.OTHER) {
             int index;
             if (Integer.valueOf(field.getType()) == Constants.PUN_TERCETO) {
@@ -286,11 +280,11 @@ public class TercetoGenerator {
     }
 
     public void showTercetos(){
-        System.out.println("*******************");
+        System.out.println("------------------");
         System.out.println("Tercetos generados:");
-        System.out.println("*******************");
+        System.out.println("------------------");
         for(int i=1; i<=tercetos.size(); i++)
             System.out.println(tercetos.get(i).toString());
-        System.out.println("*******************");
+        System.out.println("------------------");
     }
 }

@@ -43,6 +43,11 @@ public class AssemblerGenerator {
         generateDeclarations();
         assemblerCode.write(".CODE\r\nSTART:");
 
+        tercetosCode.write("\n------------------------------------------------------------");
+        tercetosCode.write("-- LISTA DE TERCETOS: CONTENIDO\r\n");
+        tercetosCode.write("-- FORMATO IDENTIFICADORES: <#>. ( <operador>, <campo1>, <campo2> ) [ <tipo> ]");
+        tercetosCode.write("------------------------------------------------------------\r\n\r\n");
+
         for (Integer index = 1; index <= tercetos.keySet().size(); index++) {
 
             Terceto terceto = tercetos.get(index);
@@ -85,7 +90,9 @@ public class AssemblerGenerator {
                     codeAssembler = operatorAux;
                     break;
                 case "OUT": {
-                    codeAssembler += "invoke MessageBox, NULL, addr Mensaje"+contadorOUT+", addr " + "Mensaje , MB_OK";
+                    codeAssembler += "invoke MessageBox, NULL, addr Mensaje"
+                            + contadorOUT
+                            + ", addr " + "Mensaje , MB_OK";
                     contadorOUT++;
                 }
                     break;
@@ -126,8 +133,6 @@ public class AssemblerGenerator {
         assemblerCode.write("Mensaje db "+ "\"Mensaje\"" +", 0");
         assemblerCode.write( "ERROR_DIV db \"Division by zero\", 0");
         assemblerCode.write( "ERROR_OVERF db \"Overflow in result\", 0");
-        //assemblerCode.write( "ERROR_DIV db \"Division by zero\", 0");
-        //assemblerCode.write( "ERROR_DIV db \"Division by zero\", 0");
 
         for (Data d : declarations) {
             assemblerCode.write( "Mensaje"+cont+" db "+ d.getLexema() + ", 0");
@@ -236,7 +241,8 @@ public class AssemblerGenerator {
                     "Label" + terceto.getIndex() + ": \r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
 
-        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
+        }
+        else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
             result = "FLD " + field1.getLexema() + "\r\n" +
                     "FSTP @f_a1" + "\r\n" +
@@ -300,7 +306,8 @@ public class AssemblerGenerator {
                     "MOV BX," + field2.getLexema() + "\r\n" +
                     "IDIV BX" + "\r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",BX";
-        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
+        }
+        else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
             result = "FLDZ\r\n" +
                     "FLD " + field2.getLexema() + "\r\n" +
@@ -373,7 +380,8 @@ public class AssemblerGenerator {
             result = "MOV AX," + field2.getLexema() + "\r\n" +
                     "MOV _" + field1.getLexema() + ",AX" + "\r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
-        } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
+        }
+        else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
             result = "FLD " + field2.getLexema() + "\r\n" +
                     "FSTP _" + field1.getLexema() + "\r\n" +
                     "FLD " + field2.getLexema() + "\r\n" +

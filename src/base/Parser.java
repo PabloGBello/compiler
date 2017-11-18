@@ -432,15 +432,16 @@ private void yyerror(String msj){
 }
 
 private void yynotify(int type, String mensaje){
-        System.out.println(mensaje);
         String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje); //v.currentLine
         la.getCompilationOutput().write(s);
 
 }
 
 public void addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
-        int value = Integer.parseInt(field.getLexema()) * (-1);
-        la.getSymbolTable().getData(Constants.CTE, la.getSymbolTable().getPosition(field.getLexema())).setLexema(String.valueOf(value));
+
+    System.out.println();
+    int value = Integer.parseInt(field.getLexema()) * (-1);
+    la.getSymbolTable().getData(Constants.CTE, la.getSymbolTable().getPosition(field.getLexema())).setLexema(String.valueOf(value));
 }
 
 public void declarar(String type){

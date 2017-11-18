@@ -162,7 +162,6 @@ public class SymbolTable {
                 stop = true;
                 if (item.getType() == null) {
                     //Variable no fue declarada
-                    System.out.println("Entra por aca con: "+item);
                     item.setType(this.getType(type));
                     item.setNumero(0);
                 }
@@ -205,12 +204,6 @@ public class SymbolTable {
         return false;
     }
 
-    public void showAll() {
-
-        for (Integer i : simbolos.keySet())
-            for (Data s : simbolos.get(i))
-                System.out.println(i + " : " + s.getLexema());
-    }
 
     public Hashtable<Integer, List<Data>> getSimbolos() {
         return simbolos;
@@ -247,7 +240,7 @@ public class SymbolTable {
         return null;
     }
 
-    public String getTypeReverse(Integer type) {
+    public static String getTypeReverse(Integer type) {
         switch(type){
             case 267:
                 return "FLOAT";
