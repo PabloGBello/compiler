@@ -100,8 +100,9 @@ public class FileHandler {
 
         try {
             writer.write("\n------------------------------------------------------------\n");
-            writer.write("-- TABLA DE SÍMBOLOS - CONTENIDO --\n\n");
+            writer.write("-- TABLA DE SÍMBOLOS: CONTENIDO --\n\n");
             writer.write("-- FORMATO IDENTIFICADORES: [ <lexema>, <numero>, <tipo>, <valor> ]\n");
+            writer.write("-- FORMATO CONSTANTES: [ <lexema>, <tipo> ]\n");
             writer.write("-- PR: PALABRA RESERVADA\n");
             writer.write("------------------------------------------------------------\n\n");
 
@@ -143,6 +144,15 @@ public class FileHandler {
                             + ", " + d.getNumero()
                             + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
                             + ", " + d.getValue()
+                            +  " ] ";
+                }
+                else if (i == 275) {
+                    txt = "[ " + d.getLexema()
+                            + ", " + ST.getTypeReverse(Integer.valueOf(d.getType()))
+                            +  " ] ";
+                }
+                else if (i == 276) {
+                    txt = "[ " + d.getLexema()
                             +  " ] ";
                 }
                 else{
