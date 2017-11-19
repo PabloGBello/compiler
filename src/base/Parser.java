@@ -410,10 +410,10 @@ public TercetoGenerator getTg(){
 }
 
 public static void main(String[] args) {
-    Parser parser = new Parser(args[0], args[1]);
+    Parser parser = new Parser(args[0], args[1s]);
     int parsedValue = parser.yyparse();
     System.out.println(parsedValue);
-
+    TercetoGenerator.finalCheck();
     parser.getLa().outputST();
     parser.getLa().compilationOutput.closeWriter();
 

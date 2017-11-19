@@ -24,7 +24,7 @@ public class TercetoGenerator {
     public static Data AUXptr = null;
     private int indexDO = -1;
     public List<Data> pilaGramatica = new ArrayList<>();
-    private SymbolTable ST;
+    public static SymbolTable ST;
 
     /* Variables necesarias para identificar el primer terceto de un bloque - usado para DO UNTIL*/
     private int indexPrimerSentBloque = 0;
@@ -206,6 +206,7 @@ public class TercetoGenerator {
             String msg = "Incompatibilidad de tipos entre tercetos. Terceto "
                     + indexTerceto + ", tipos " + aux1 + " y " + aux2;
             String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
+            s +=  Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
         }
@@ -234,8 +235,18 @@ public class TercetoGenerator {
     public void  tercetoLET(){
         String lexA = this.getAptr().getLexema();
         int i = Integer.valueOf(lexA.substring(1, lexA.length() - 1));
-        String tipoE = this.getEptr().getType();
-        this.tercetos.get(i).field1.setType(tipoE);
+        if(Integer.valueOf(ST.getData(tercetos.get(i).field1.getCode(), tercetos.get(i).field1.getLexema()).getType()) == Constants.OTHER) {
+            String tipoE = this.getEptr().getType();
+            this.tercetos.get(i).field1.setType(tipoE);
+        }
+        else {
+
+            String msg = "Sentencia LET invalida, el lexema \"" + tercetos.get(i).field1.getLexema() + "\" ya se encuentra declarado.";
+            String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
+            System.out.println(msg);
+            LexicalAnalizer.compilationOutput.write(s);
+            System.exit(1);
+        }
     }
 
 
@@ -271,6 +282,20 @@ public class TercetoGenerator {
         }
 
         return Integer.valueOf(field.getType());
+    }
+    public static void finalCheck(){
+        String s ="";
+        for(Data d : ST.getSimbolos().get(Constants.ID)){
+            if(Integer.valueOf(d.getType()) == Constants.OTHER){
+                String msg = "Variable \"" + d.getLexema() + "\" no fue declarada.";
+                s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg) + "\r\n"; //v.currentLine
+            }
+        }
+        if(!s.equals("")) {
+            System.out.println(s);
+            LexicalAnalizer.compilationOutput.write(s);
+            System.exit(1);
+        }
     }
 
     public void showTercetos(){
