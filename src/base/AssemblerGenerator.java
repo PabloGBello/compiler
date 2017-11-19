@@ -87,7 +87,7 @@ public class AssemblerGenerator {
                     codeAssembler = generateBI(terceto);
                     break;
                 case "Label":
-                    codeAssembler = operatorAux;
+                    codeAssembler = operatorAux + ":";
                     break;
                 case "OUT": {
                     codeAssembler += "invoke MessageBox, NULL, addr Mensaje"
