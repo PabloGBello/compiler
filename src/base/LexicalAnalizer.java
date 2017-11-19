@@ -20,15 +20,15 @@ public class LexicalAnalizer {
 
     public Data val;
 
-    private FileHandler compilationOutput, STOutput;
+    public static FileHandler compilationOutput, STOutput;
 
-    private Values values = new Values();
+    public static Values values = new Values();
     public SymbolTable ST;
 
-    public LexicalAnalizer(String dir){
+    public LexicalAnalizer(String dir, String fileName){
 
         //Obtenemos el contenido del archivo fuente
-        FileHandler codeReader = new FileHandler(0, dir, "fuente.txt");
+        FileHandler codeReader = new FileHandler(0, dir, fileName);
         code = codeReader.dumpSourceCode();
 
         //Instanciamos el manejador de archivo para la salida de la compilacion
@@ -94,14 +94,6 @@ public class LexicalAnalizer {
 
     public SymbolTable getSymbolTable(){
         return ST;
-    }
-
-    public FileHandler getCompilationOutput(){
-        return compilationOutput;
-    }
-
-    public Values getValues(){
-        return values;
     }
 
     public void outputST(){

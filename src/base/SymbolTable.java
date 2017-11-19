@@ -169,12 +169,12 @@ public class SymbolTable {
                     //Variable existe
                     if (item.getType().equals(this.getType(type))) {
                         //Variable en T.S. == tipo que la variable proxima a declarar: ERROR!
-                        System.out.println("ERROR!!!! dos variables adyacentes declaradas con mismo tipo. Chau");
+                        String msg = "Declaracon de dos variables iguales y de mismo tipo de forma adyacente.";
+                        String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
+                        LexicalAnalizer.compilationOutput.write(s);
                         System.exit(1);
                     }
                     else {
-
-                        System.out.println("fue por aca... shadowing");
                         //Variable en T.S. <> tipo que la variable proxima a declarar: SHADOWING
                         this.addSymbol(Constants.ID, lex, this.getType(type), item.getNumero() + 1);
                         TercetoGenerator.AUXptr = getData(Constants.ID, lex, this.getType(type));

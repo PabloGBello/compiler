@@ -203,20 +203,22 @@ public class TercetoGenerator {
 
         if( type == -1) {
             System.out.println("Terceto: " + indexTerceto + " Incompatibilidad de tipos: " + aux1 + " y " + aux2);
+            String msg = "Incompatibilidad de tipos entre tercetos. Terceto "
+                    + indexTerceto + ", tipos " + aux1 + " y " + aux2;
+            String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
+            LexicalAnalizer.compilationOutput.write(s);
+            System.exit(1);
         }
         else {
-            /*if(Integer.valueOf(field1.getType()) == Constants.OTHER) {
-                aux.setType(String.valueOf(Constants.OTHER));
-                System.out.println("entra a asignar el tipo: " + field1+ " " +aux);
-            }
-            else*/
-                aux.setType(String.valueOf(type));
-
+            aux.setType(String.valueOf(type));
         }
+
         aux.setField1(aux1);
         aux.setField2(aux2);
+
         Data data = new Data(String.valueOf("["+indexTerceto+"]"), String.valueOf(Constants.PUN_TERCETO));
         data.setCode(Constants.PUN_TERCETO);
+
         // Variable auxiliar asociada a cada terceto.
         Data info = new Data("@aux" + aux.getIndex(),aux.getType());
         info.setCode(data.getCode());

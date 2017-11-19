@@ -399,9 +399,9 @@ LexicalAnalizer la;
 TercetoGenerator tg;
 ArrayList<String> aDeclarar = new ArrayList();
 
-public Parser(String dir) {
+public Parser(String dir, String fileName) {
 
-  la = new LexicalAnalizer(dir);
+  la = new LexicalAnalizer(dir, fileName);
   tg = new TercetoGenerator(la.getSymbolTable());
 }
 
@@ -410,12 +410,12 @@ public TercetoGenerator getTg(){
 }
 
 public static void main(String[] args) {
-    Parser parser = new Parser(args[0]);
+    Parser parser = new Parser(args[0], args[1]);
     int parsedValue = parser.yyparse();
     System.out.println(parsedValue);
 
     parser.getLa().outputST();
-    parser.getLa().getCompilationOutput().closeWriter();
+    parser.getLa().compilationOutput.closeWriter();
 
     AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);
     ag.setTercetos(parser.getTg().getTercetos());
@@ -433,8 +433,8 @@ private void yyerror(String msj){
 
 private void yynotify(int type, String mensaje){
         System.out.println(mensaje);
-        String s = Printer.getMessage(1,type, la.getValues().getCurrentLine(), mensaje); //v.currentLine
-        la.getCompilationOutput().write(s);
+        String s = Printer.getMessage(1,type, la.values.getCurrentLine(), mensaje); //v.currentLine
+        la.compilationOutput.write(s);
 
 }
 

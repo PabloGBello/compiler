@@ -100,7 +100,7 @@ public class FileHandler {
 
         try {
             writer.write("\n------------------------------------------------------------\r\n");
-            writer.write("-- TABLA DE SÍMBOLOS: CONTENIDO\r\n\r\n");
+            writer.write("-- TABLA DE SIMBOLOS: CONTENIDO\r\n\r\n");
             writer.write("-- FORMATO IDENTIFICADORES: [ <lexema>, <numero>, <tipo>, <valor> ]\r\n");
             writer.write("-- FORMATO CONSTANTES: [ <lexema>, <tipo> ]\r\n");
             writer.write("-- PR: PALABRA RESERVADA\r\n\r\n");
