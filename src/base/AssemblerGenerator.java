@@ -118,13 +118,13 @@ public class AssemblerGenerator {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DW ?");
                 else
-                    assemblerCode.write("_" + d.getLexema() + " DW ?");
+                    assemblerCode.write(d.getLexema() + " DW ?");
             }
             else {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DQ ?");
                 else
-                    assemblerCode.write("_" + d.getLexema() + " DQ ?");
+                    assemblerCode.write(d.getLexema() + " DQ ?");
             }
         }
         declarations.clear();
@@ -272,6 +272,7 @@ public class AssemblerGenerator {
         String result = "";
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
 
+
             result = "MOV AX," + field1.getLexema() + "\r\n" +
                     "SUB AX," + field2.getLexema() + "\r\n" +
                     "MOV " + field1.getLexema() + ",AX\r\n" +
@@ -381,13 +382,13 @@ public class AssemblerGenerator {
 
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
             result = "MOV AX," + field2.getLexema() + "\r\n" +
-                    "MOV _" + field1.getLexema() + ",AX" + "\r\n" +
+                    "MOV " + field1.getLexema() + ",AX" + "\r\n" +
 
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
         }
         else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
             result = "FLD " + field2.getLexema() + "\r\n" +
-                    "FSTP _" + field1.getLexema() + "\r\n" +
+                    "FSTP " + field1.getLexema() + "\r\n" +
                     "FLD " + field2.getLexema() + "\r\n" +
                     "FSTP " + terceto.getVarAux().getLexema();
         }
@@ -406,7 +407,11 @@ public class AssemblerGenerator {
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            field1 = tercetos.get(pos).getVarAux();
+            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+                field1 = tercetos.get(pos).getField1();
+            else
+                field1 = tercetos.get(pos).getVarAux();
+
             field2 = terceto.getField2();
         }
         else if (caso == 2) {
@@ -415,7 +420,11 @@ public class AssemblerGenerator {
             aux = terceto.getField2().getLexema();
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
-            field2 = tercetos.get(pos).getVarAux();
+
+            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+                field2 = tercetos.get(pos).getField2();
+            else
+                field2 = tercetos.get(pos).getVarAux();
         }
         else if (caso == 3) {
 
@@ -423,13 +432,20 @@ public class AssemblerGenerator {
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            field1 = tercetos.get(pos).getVarAux();
+            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+                field1 = tercetos.get(pos).getField1();
+            else
+                field1 = tercetos.get(pos).getVarAux();
 
             aux = terceto.getField2().getLexema();
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            field2 = tercetos.get(pos).getVarAux();
+            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+                field2 = tercetos.get(pos).getField2();
+            else
+                field2 = tercetos.get(pos).getVarAux();
+
         }
         else if (caso == 4) {
 
