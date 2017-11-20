@@ -187,22 +187,22 @@ public class AssemblerGenerator {
 
         switch (tercetoCMP.getOperator().getLexema()) {
             case ">":
-                oper = "JG";
-                break;
-            case "<>":
-                oper = "JNE";
-                break;
-            case ">=":
-                oper = "JGE";
-                break;
-            case "==":
-                oper = "JE";
-                break;
-            case "<":
                 oper = "JL";
                 break;
-            case "<=":
+            case "<>":
+                oper = "JE";
+                break;
+            case ">=":
                 oper = "JLE";
+                break;
+            case "==":
+                oper = "JNE";
+                break;
+            case "<":
+                oper = "JG";
+                break;
+            case "<=":
+                oper = "JGE";
                 break;
         }
 
@@ -274,6 +274,7 @@ public class AssemblerGenerator {
 
             result = "MOV AX," + field1.getLexema() + "\r\n" +
                     "SUB AX," + field2.getLexema() + "\r\n" +
+                    "MOV " + field1.getLexema() + ",AX\r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)){
 
@@ -379,6 +380,7 @@ public class AssemblerGenerator {
         if (Integer.valueOf(terceto.getType()).equals(Constants.INT)) {
             result = "MOV AX," + field2.getLexema() + "\r\n" +
                     "MOV _" + field1.getLexema() + ",AX" + "\r\n" +
+
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
         }
         else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
