@@ -171,16 +171,20 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
+        //System.ou
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
 
         if(operator.equals("=")) {
+            System.out.println("Entra: "+field1);
             aux1 = field1;
         }
         else {
+
             aux1 = this.lastDeclaration(field1);
+            System.out.print("Se le asigna: "+aux1);
 
         }
 
@@ -283,6 +287,7 @@ public class TercetoGenerator {
 
         return Integer.valueOf(field.getType());
     }
+
     public static void finalCheck(){
         String s ="";
         for(Data d : ST.getSimbolos().get(Constants.ID)){

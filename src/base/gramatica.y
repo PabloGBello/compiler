@@ -225,7 +225,7 @@ asignacion : ID '=' expresion'.'                                            {if(
                                                                                 TercetoGenerator.AUXptr = null;
                                                                             }
                                                                             else
-                                                                                tg.setAptr(tg.createTerceto("=", ((Data)val_peek(3).obj), tg.getEptr()));}
+                                                                                tg.setAptr(tg.createTerceto("=", la.ST.getData(((Data)$1.obj).getCode(), ((Data)$1.obj).getLexema()), tg.getEptr()));}
 
 
 

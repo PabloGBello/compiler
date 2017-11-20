@@ -217,24 +217,55 @@ public class SymbolTable {
      */
 
     public Data getData(int key, String lexema) {
-        if (simbolos.containsKey(key)) {
-            for(Data d: simbolos.get(key)){
-                if (d.getLexema().equals(lexema))
-                    return d;
+        List<Data> lista = simbolos.get(Constants.ID);
+        int i = lista.size()-1;
+
+        //Recorro la lista de IDs de atras hacia adelante
+        while (i >= 0) {
+
+            Data item = lista.get(i);
+
+            if(item.getLexema().equals(lexema)){
+                System.out.println("retorna: "+item);
+                return item;
             }
+
+            i--;
         }
         return null;
+
+
     }
 
     public Data getData(int key, String lexema, String type) {
-        if (simbolos.containsKey(key)) {
-            for(Data d: simbolos.get(key)){
-                if ((d.getLexema().equals(lexema)) && d.getType().equals(type)) {
-                    return d;
-                }
+
+        List<Data> lista = simbolos.get(Constants.ID);
+        int i = lista.size()-1;
+        boolean stop = false;
+
+        //Recorro la lista de IDs de atras hacia adelante
+        while (i >= 0 && !stop) {
+
+            Data item = lista.get(i);
+
+            if(item.getLexema().equals(lexema) && item.getType().equals(type)){
+                System.out.println("retorna: "+item);
+                return item;
             }
+
+            i--;
         }
         return null;
+        /*public Data getData(int key, String lexema, String type) {
+            if (simbolos.containsKey(key)) {
+                for(Data d: simbolos.get(key)){
+                    if ((d.getLexema().equals(lexema)) && d.getType().equals(type)) {
+                        return d;
+                    }
+                }
+            }
+            return null;
+        }*/
     }
 
 

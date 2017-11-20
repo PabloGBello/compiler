@@ -345,8 +345,10 @@ public class AssemblerGenerator {
                     "ADD AX," + field2.getLexema() + "\r\n" +
                     "JNO Label" + terceto.getIndex() + "\r\n" +
                     error + "\r\n" +
-                    "Label" + terceto.getIndex() + ": \r\n" +
-                    "MOV " + terceto.getVarAux().getLexema() + ",AX";
+                    "Label" + terceto.getIndex() + ": \r\n";
+                    result += "MOV " + field1.getLexema() + ",AX\r\n";
+                    result += "MOV " + terceto.getVarAux().getLexema() + ",AX";
+
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
 
             result = "FLD " + field1.getLexema() + "\r\n" +

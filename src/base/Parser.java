@@ -700,7 +700,7 @@ case 35:
                                                                                 TercetoGenerator.AUXptr = null;
                                                                             }
                                                                             else
-                                                                                tg.setAptr(tg.createTerceto("=", ((Data)val_peek(3).obj), tg.getEptr()));}
+                                                                                tg.setAptr(tg.createTerceto("=", la.ST.getData(((Data)val_peek(3).obj).getCode(), ((Data)val_peek(3).obj).getLexema()), tg.getEptr()));}
 break;
 case 36:
 //#line 232 "gramatica.y"
