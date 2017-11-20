@@ -171,21 +171,16 @@ public class TercetoGenerator {
             primerSentBloque = true;
             indexPrimerSentBloque = indexTerceto;
         }
-        //System.ou
         Terceto aux = new Terceto();
         aux.setIndex(indexTerceto);
         aux.setOperator(new Data(operator));
         Data aux1, aux2;
 
         if(operator.equals("=")) {
-            System.out.println("Entra: "+field1);
             aux1 = field1;
         }
         else {
-
             aux1 = this.lastDeclaration(field1);
-            System.out.print("Se le asigna: "+aux1);
-
         }
 
         if(field2.getCode() == Constants.ID) {
@@ -206,11 +201,11 @@ public class TercetoGenerator {
         int type = conversions.getConversion(operator, typeTerceto1, typeTerceto2);
 
         if( type == -1) {
-            System.out.println("Terceto: " + indexTerceto + " Incompatibilidad de tipos: " + aux1 + " y " + aux2);
-            String msg = "Incompatibilidad de tipos entre tercetos. Terceto "
-                    + indexTerceto + ", tipos " + aux1 + " y " + aux2;
-            String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
-            s +=  Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
+            String msg = "Incompatibilidad de tipos. Se intento asignar un "
+                    + SymbolTable.getTypeReverse(Integer.valueOf(aux2.getType()))
+                    + " a un "
+                    + SymbolTable.getTypeReverse(Integer.valueOf(aux1.getType()));
+            String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
         }
@@ -245,9 +240,8 @@ public class TercetoGenerator {
         }
         else {
 
-            String msg = "Sentencia LET invalida, el lexema \"" + tercetos.get(i).field1.getLexema() + "\" ya se encuentra declarado.";
-            String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
-            System.out.println(msg);
+            String msg = "Sentencia LET invalida, el lexema " + tercetos.get(i).field1.getLexema() + " ya se encuentra declarado.";
+            String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
         }
@@ -292,14 +286,12 @@ public class TercetoGenerator {
         String s ="";
         for(Data d : ST.getSimbolos().get(Constants.ID)){
             if(Integer.valueOf(d.getType()) == Constants.OTHER){
-                String msg = "Variable \"" + d.getLexema() + "\" no fue declarada.";
-                s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg) + "\r\n"; //v.currentLine
+                String msg = "Variable " + d.getLexema() + " no fue declarada.";
+                s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg) + "\r\n";
             }
         }
         if(!s.equals("")) {
-            System.out.println(s);
             LexicalAnalizer.compilationOutput.write(s);
-            System.exit(1);
         }
     }
 

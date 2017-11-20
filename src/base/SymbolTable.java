@@ -92,7 +92,6 @@ public class SymbolTable {
         if (!simbolos.containsKey(key))
             simbolos.put(key, new ArrayList());
 
-        System.out.println("Entra por aca");
         Data data = new Data(value, String.valueOf(type));
         data.setCode(key);
         simbolos.get(key).add(data);
@@ -222,11 +221,8 @@ public class SymbolTable {
 
         //Recorro la lista de IDs de atras hacia adelante
         while (i >= 0) {
-
             Data item = lista.get(i);
-
             if(item.getLexema().equals(lexema)){
-                System.out.println("retorna: "+item);
                 return item;
             }
 
@@ -241,15 +237,11 @@ public class SymbolTable {
 
         List<Data> lista = simbolos.get(Constants.ID);
         int i = lista.size()-1;
-        boolean stop = false;
 
         //Recorro la lista de IDs de atras hacia adelante
-        while (i >= 0 && !stop) {
-
+        while (i >= 0) {
             Data item = lista.get(i);
-
             if(item.getLexema().equals(lexema) && item.getType().equals(type)){
-                System.out.println("retorna: "+item);
                 return item;
             }
 

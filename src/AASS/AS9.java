@@ -29,7 +29,6 @@ public class AS9 extends SemanticAction {
         super.addToken(lex);
 
         if (st.getKey(lex) == -1){
-            System.out.println("encuentra " + lex);
             st.addSymbol(Constants.CADENA, lex);
         }
 
