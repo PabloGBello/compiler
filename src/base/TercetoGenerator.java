@@ -157,6 +157,7 @@ public class TercetoGenerator {
             aux.setField2(new Data("-", String.valueOf(Constants.FLOAT)));
             aux.setType(String.valueOf(Constants.FLOAT));
             Data info = new Data("@aux" + aux.getIndex(),aux.getType());
+            aux.setVarAux(info);
             ST.addItem(Constants.ID,"@aux" + aux.getIndex(),aux.getType());
             tercetos.put(indexTerceto, aux);
             indexTerceto++;

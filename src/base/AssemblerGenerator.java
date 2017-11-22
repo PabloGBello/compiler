@@ -162,7 +162,6 @@ public class AssemblerGenerator {
     public String generateI_F(Terceto terceto) {
 
         String result = "";
-
         result = "FILD " + field1.getLexema() + "\r\n" +
                  "FSTP " + terceto.getVarAux().getLexema();
 
@@ -220,8 +219,8 @@ public class AssemblerGenerator {
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)) {
             result = "FLD " + field1.getLexema() +"\r\n" +
                      "FCOM "+ field2.getLexema() + "\r\n" +
-                     "FSTSW BX"  + "\r\n" +
-                     "MOV AX, BX"+ "\r\n" +
+                     "FSTSW AX"  + "\r\n" +
+                     "MOV AX, AX"+ "\r\n" +
                      "SAHF";
         }
         return result;
@@ -275,7 +274,6 @@ public class AssemblerGenerator {
 
             result = "MOV AX," + field1.getLexema() + "\r\n" +
                     "SUB AX," + field2.getLexema() + "\r\n" +
-                    "MOV " + field1.getLexema() + ",AX\r\n" +
                     "MOV " + terceto.getVarAux().getLexema() + ",AX";
         } else if (Integer.valueOf(terceto.getType()).equals(Constants.FLOAT)){
 
