@@ -205,7 +205,8 @@ public class TercetoGenerator {
             String msg = "Incompatibilidad de tipos. Se intento asignar un "
                     + SymbolTable.getTypeReverse(Integer.valueOf(aux2.getType()))
                     + " a un "
-                    + SymbolTable.getTypeReverse(Integer.valueOf(aux1.getType()));
+                    + SymbolTable.getTypeReverse(Integer.valueOf(aux1.getType()))
+                    + ". Compilación interrumpida.";
             String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
@@ -241,7 +242,7 @@ public class TercetoGenerator {
         }
         else {
 
-            String msg = "Sentencia LET invalida, el lexema " + tercetos.get(i).field1.getLexema() + " ya se encuentra declarado.";
+            String msg = "Sentencia LET invalida, el lexema " + tercetos.get(i).field1.getLexema() + " ya se encuentra declarado. Compilación interrumpida.";
             String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
@@ -285,15 +286,20 @@ public class TercetoGenerator {
 
     public static void finalCheck(){
         String s ="";
+        boolean wasError = false;
         for(Data d : ST.getSimbolos().get(Constants.ID)){
             if(Integer.valueOf(d.getType()) == Constants.OTHER){
-                String msg = "Variable " + d.getLexema() + " no fue declarada.";
-                s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg) + "\r\n";
+                String msg = "Variable " + d.getLexema() + " no fue declarada. Compilación interrumpida. \\r\\n";
+                s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
+
+                wasError = true;
             }
         }
         if(!s.equals("")) {
             LexicalAnalizer.compilationOutput.write(s);
         }
+
+        if (wasError) System.exit(1);
     }
 
     public void showTercetos(){
