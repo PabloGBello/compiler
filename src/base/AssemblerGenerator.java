@@ -57,6 +57,8 @@ public class AssemblerGenerator {
             String operatorAux = "";
 
             setFields(terceto);
+            addUnderScore(field1);
+            addUnderScore(field2);
 
             // Verifico si es un terceto Label.
             if (terceto.getOperator().getType() != null && Integer.valueOf(terceto.getOperator().getType()).equals(Constants.BRANCH)) {
@@ -118,13 +120,13 @@ public class AssemblerGenerator {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DW ?");
                 else
-                    assemblerCode.write("_" + d.getLexema() + " DW ?");
+                    assemblerCode.write("_"+d.getLexema() + " DW ?");
             }
             else {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DD ?");
                 else
-                    assemblerCode.write("_" + d.getLexema() + " DD ?");
+                    assemblerCode.write("_"+d.getLexema() + " DD ?");
             }
         }
         declarations.clear();
@@ -395,9 +397,14 @@ public class AssemblerGenerator {
     }
 
     public void addUnderScore(Data field){
-
-        if (field.getCode() == Constants.ID)
-            field.setLexema("_" + field.getLexema());
+        char a = 0;
+        if(field != null) {
+            a = field.getLexema().substring(0).toCharArray()[0];/**Extraigo el primer caracter**/
+            if ((field.getCode() == Constants.ID) && /**Chequeo que sea ID**/
+                    (a != '@') && /**Si tiene un @ es una auxiliar, no necesita _**/
+                    (a != '_')) /**Esta ultima es por si ya tiene un _ anterior para que ponga otro _**/
+                field.setLexema("_" + field.getLexema());
+        }
     }
 
     public void setFields(Terceto terceto) {
@@ -413,18 +420,15 @@ public class AssemblerGenerator {
 
             if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field1 = tercetos.get(pos).getField1();
-                addUnderScore(field1);
             }
             else
                 field1 = tercetos.get(pos).getVarAux();
 
             field2 = terceto.getField2();
-            addUnderScore(field2);
         }
         else if (caso == 2) {
 
             field1 = terceto.getField1();
-            addUnderScore(field1);
 
             aux = terceto.getField2().getLexema();
             aux = aux.substring(1, aux.length() - 1);
@@ -432,7 +436,6 @@ public class AssemblerGenerator {
 
             if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field2 = tercetos.get(pos).getField2();
-                addUnderScore(field1);
             }
             else
                 field2 = tercetos.get(pos).getVarAux();
@@ -445,7 +448,6 @@ public class AssemblerGenerator {
 
             if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field1 = tercetos.get(pos).getField1();
-                addUnderScore(field1);
             }
             else
                 field1 = tercetos.get(pos).getVarAux();
@@ -456,7 +458,6 @@ public class AssemblerGenerator {
 
             if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field2 = tercetos.get(pos).getField2();
-                addUnderScore(field2);
             }
             else
                 field2 = tercetos.get(pos).getVarAux();
@@ -465,9 +466,7 @@ public class AssemblerGenerator {
         else if (caso == 4) {
 
             field1 = terceto.getField1();
-            addUnderScore(field1);
             field2 = terceto.getField2();
-            addUnderScore(field2);
         }
     }
 
