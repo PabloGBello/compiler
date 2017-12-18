@@ -118,13 +118,13 @@ public class AssemblerGenerator {
                 if (d.getLexema().contains("@"))
                     assemblerCode.write(d.getLexema() + " DW ?");
                 else
-                    assemblerCode.write(d.getLexema() + " DW ?");
+                    assemblerCode.write("_" + d.getLexema() + " DW ?");
             }
             else {
                 if (d.getLexema().contains("@"))
-                    assemblerCode.write(d.getLexema() + " DQ ?");
+                    assemblerCode.write(d.getLexema() + " DD ?");
                 else
-                    assemblerCode.write(d.getLexema() + " DQ ?");
+                    assemblerCode.write("_" + d.getLexema() + " DD ?");
             }
         }
         declarations.clear();
@@ -144,14 +144,14 @@ public class AssemblerGenerator {
         for(Data d : declarations){
             if(Integer.valueOf(d.getType()) == Constants.FLOAT){
                 String auxF = "@float"+contFloat;
-                assemblerCode.write(auxF + " DQ "+d.getLexema());
+                assemblerCode.write(auxF + " DD "+d.getLexema());
                 d.setLexema(auxF);
 
                 if(contFloat == 1){
-                    assemblerCode.write("@f_max " + "DQ 3.40282347e38");
-                    assemblerCode.write("@f_min " + "DQ 1.18e-38");
-                    assemblerCode.write("@f_a1"  + " DQ ?");
-                    assemblerCode.write("@f_a2"  + " DQ ?");
+                    assemblerCode.write("@f_max " + "DD 3.40282347e38");
+                    assemblerCode.write("@f_min " + "DD 1.18e-38");
+                    assemblerCode.write("@f_a1"  + " DD ?");
+                    assemblerCode.write("@f_a2"  + " DD ?");
                 }
 
                 contFloat++;
@@ -394,6 +394,12 @@ public class AssemblerGenerator {
         return result;
     }
 
+    public void addUnderScore(Data field){
+
+        if (field.getCode() == Constants.ID)
+            field.setLexema("_" + field.getLexema());
+    }
+
     public void setFields(Terceto terceto) {
 
         String aux = "";
@@ -405,22 +411,29 @@ public class AssemblerGenerator {
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+            if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field1 = tercetos.get(pos).getField1();
+                addUnderScore(field1);
+            }
             else
                 field1 = tercetos.get(pos).getVarAux();
 
             field2 = terceto.getField2();
+            addUnderScore(field2);
         }
         else if (caso == 2) {
 
             field1 = terceto.getField1();
+            addUnderScore(field1);
+
             aux = terceto.getField2().getLexema();
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+            if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field2 = tercetos.get(pos).getField2();
+                addUnderScore(field1);
+            }
             else
                 field2 = tercetos.get(pos).getVarAux();
         }
@@ -430,8 +443,10 @@ public class AssemblerGenerator {
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+            if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field1 = tercetos.get(pos).getField1();
+                addUnderScore(field1);
+            }
             else
                 field1 = tercetos.get(pos).getVarAux();
 
@@ -439,8 +454,10 @@ public class AssemblerGenerator {
             aux = aux.substring(1, aux.length() - 1);
             pos = Integer.valueOf(aux);
 
-            if (tercetos.get(pos).getOperator().getLexema().equals("="))
+            if (tercetos.get(pos).getOperator().getLexema().equals("=")) {
                 field2 = tercetos.get(pos).getField2();
+                addUnderScore(field2);
+            }
             else
                 field2 = tercetos.get(pos).getVarAux();
 
@@ -448,7 +465,9 @@ public class AssemblerGenerator {
         else if (caso == 4) {
 
             field1 = terceto.getField1();
+            addUnderScore(field1);
             field2 = terceto.getField2();
+            addUnderScore(field2);
         }
     }
 
