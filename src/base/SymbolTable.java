@@ -216,11 +216,16 @@ public class SymbolTable {
      */
 
     public Data getData(int key, String lexema) {
-        List<Data> lista = simbolos.get(Constants.ID);
+        List<Data> lista = simbolos.get(key); /**En esta  linea era el problema del negativo
+                                                se invocaba asi List<Data> lista = simbolos.get(Constants.ID);
+                                                con ese parametro ID fijo entonces solo traia los
+                                                identificadores, ahora con el key trae lo que diga key,
+                                                ej: key 274(lista de CTEs)**/
         int i = lista.size()-1;
 
         //Recorro la lista de IDs de atras hacia adelante
         while (i >= 0) {
+
             Data item = lista.get(i);
             if(item.getLexema().equals(lexema)){
                 return item;

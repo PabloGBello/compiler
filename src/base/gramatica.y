@@ -326,20 +326,29 @@ private void yynotify(int type, String mensaje){
 }
 
 public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
-        SymbolTable tab = la.getSymbolTable();
-        int value = Integer.parseInt(field.getLexema()) * (-1);
-        Data aux = tab.getData(field.getCode(), field.getLexema());
-        if(aux != null && aux.getLexema().equals(field.getLexema())) {
-            aux = tab.getData(field.getCode(), String.valueOf(value));
-            if (aux == null) {
-                aux = new Data();
-                aux.setLexema(String.valueOf(value));
-                aux.setType(field.getType());
-                aux.setCode(field.getCode());
-                tab.addData(aux);
-            }
-        }
+    SymbolTable tab = la.getSymbolTable();
+    int ai;
+    float af;
+    String value;
+    if(Integer.valueOf(field.getType()) == Constants.INT) {
+        ai = Integer.parseInt(field.getLexema()) * (-1);
+        value = String.valueOf(ai);
+    } else {
+        af = Float.parseFloat(field.getLexema()) * (-1.0f);
+        value = String.valueOf(af);
+    }
+    Data aux = tab.getData(field.getCode(), value);
+    if(aux != null && aux.getLexema().equals(value)) {
         return aux;
+    }
+    if (aux == null) {
+        aux = new Data();
+        aux.setLexema(String.valueOf(value));
+        aux.setType(field.getType());
+        aux.setCode(field.getCode());
+        tab.addData(aux);
+    }
+    return aux;
 }
 
 public void declarar(String type){

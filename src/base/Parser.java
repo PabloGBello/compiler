@@ -439,20 +439,29 @@ private void yynotify(int type, String mensaje){
 }
 
 public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
-        SymbolTable tab = la.getSymbolTable();
-        int value = Integer.parseInt(field.getLexema()) * (-1);
-        Data aux = tab.getData(field.getCode(), field.getLexema());
-        if(aux != null && aux.getLexema().equals(field.getLexema())) {
-            aux = tab.getData(field.getCode(), String.valueOf(value));
-            if (aux == null) {
-                aux = new Data();
-                aux.setLexema(String.valueOf(value));
-                aux.setType(field.getType());
-                aux.setCode(field.getCode());
-                tab.addData(aux);
-            }
-        }
+    SymbolTable tab = la.getSymbolTable();
+    int ai;
+    float af;
+    String value;
+    if(Integer.valueOf(field.getType()) == Constants.INT) {
+        ai = Integer.parseInt(field.getLexema()) * (-1);
+        value = String.valueOf(ai);
+    } else {
+        af = Float.parseFloat(field.getLexema()) * (-1.0f);
+        value = String.valueOf(af);
+    }
+    Data aux = tab.getData(field.getCode(), value);
+    if(aux != null && aux.getLexema().equals(value)) {
         return aux;
+    }
+    if (aux == null) {
+        aux = new Data();
+        aux.setLexema(String.valueOf(value));
+        aux.setType(field.getType());
+        aux.setCode(field.getCode());
+        tab.addData(aux);
+    }
+    return aux;
 }
 
 public void declarar(String type){
@@ -468,7 +477,7 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-//#line 400 "Parser.java"
+//#line 409 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -758,7 +767,7 @@ case 52:
 //#line 279 "gramatica.y"
 {tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
-//#line 685 "Parser.java"
+//#line 694 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
