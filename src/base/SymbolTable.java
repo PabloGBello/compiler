@@ -267,6 +267,19 @@ public class SymbolTable {
 
 
     public void addData(Data data){
+        /**Implementar el chequeo de rangos negativo distinguiendo de FLOAT e INT*/
+
+        if(Integer.valueOf(data.getType()).intValue() == Constants.INT) {
+            if (Integer.valueOf(data.getLexema()) < -32768 || Integer.valueOf(data.getLexema()) > 32767) {
+                String s = Printer.getMessage(0, 0, 0, "Constante " + data.getLexema() + " de tipo INT fuera del rango permitido.");
+                this.getCompilationOutput().write(s);
+            }
+        } else {
+            if (Float.valueOf(data.getLexema()) < -32768.0F || Float.valueOf(data.getLexema()) > 32767.0F) {
+                String s = Printer.getMessage(0, 0, 0, "Constante " + data.getLexema() + " de tipo FLOAT fuera del rango permitido.");
+                this.getCompilationOutput().write(s);
+            }
+        }
         simbolos.get(data.getCode()).add(data);
     }
 
