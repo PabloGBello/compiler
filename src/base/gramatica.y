@@ -102,6 +102,8 @@ tipo : INT
 
      | FLOAT
 
+     | error                                                                {{yynotify(1, "El tipo es invalido");}}
+
 ;
 
 
