@@ -102,7 +102,10 @@ tipo : INT
 
      | FLOAT
 
-     | error                                                                {{yynotify(1, "El tipo es invalido");}}
+     | error                                                                {   String msg = "El tipo " + ((Data)val_peek(0).obj).getLexema().toUpperCase()+ " no es valido. No se puede continuar. \\r\\n";
+                                                                                String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
+                                                                                LexicalAnalizer.compilationOutput.write(s);
+                                                                                System.exit(1);}
 
 ;
 
