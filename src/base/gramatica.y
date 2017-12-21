@@ -309,9 +309,13 @@ public static void main(String[] args) {
     parser.getLa().outputST();
     parser.getLa().compilationOutput.closeWriter();
 
-    AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);
-    ag.setTercetos(parser.getTg().getTercetos());
-    ag.generate();
+    if (!Constants.err){
+        AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);
+        ag.setTercetos(parser.getTg().getTercetos());
+        ag.generate();
+     }
+     else
+        System.exit(1);
 }
 
 private int yylex(){
@@ -324,6 +328,8 @@ private void yyerror(String msj){
 }
 
 private void yynotify(int type, String mensaje){
+        if (type == 1)
+            Constants.err = true;
         System.out.println(mensaje);
         String s = Printer.getMessage(1,type, la.values.getCurrentLine(), mensaje); //v.currentLine
         la.compilationOutput.write(s);

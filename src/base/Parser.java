@@ -418,9 +418,13 @@ public static void main(String[] args) {
     parser.getLa().outputST();
     parser.getLa().compilationOutput.closeWriter();
 
-    AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);
-    ag.setTercetos(parser.getTg().getTercetos());
-    ag.generate();
+    if (!Constants.err){
+        AssemblerGenerator ag = new AssemblerGenerator(parser.getLa().getSymbolTable(),args[0]);
+        ag.setTercetos(parser.getTg().getTercetos());
+        ag.generate();
+     }
+     else
+        System.exit(1);
 }
 
 private int yylex(){
@@ -433,6 +437,8 @@ private void yyerror(String msj){
 }
 
 private void yynotify(int type, String mensaje){
+        if (type == 1)
+            Constants.err = true;
         System.out.println(mensaje);
         String s = Printer.getMessage(1,type, la.values.getCurrentLine(), mensaje); //v.currentLine
         la.compilationOutput.write(s);
@@ -478,7 +484,7 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-//#line 410 "Parser.java"
+//#line 416 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -775,7 +781,7 @@ case 53:
 //#line 284 "gramatica.y"
 {tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
-//#line 702 "Parser.java"
+//#line 708 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
