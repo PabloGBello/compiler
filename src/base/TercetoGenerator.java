@@ -290,7 +290,6 @@ public class TercetoGenerator {
         boolean wasError = false;
         for(Data d : ST.getSimbolos().get(Constants.ID)){
 
-            System.out.println("Rompe con "+d);
             if(d.getType() != null && Integer.valueOf(d.getType()) == Constants.OTHER){
                 msg = "Variable " + d.getLexema() + " no fue declarada. Compilación interrumpida. \\r\\n";
                 s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);

@@ -394,7 +394,7 @@ final static String yyrule[] = {
 "factor : I_F '(' expresion ')'",
 };
 
-//#line 289 "gramatica.y"
+//#line 290 "gramatica.y"
 
 LexicalAnalizer la;
 TercetoGenerator tg;
@@ -466,7 +466,8 @@ public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         aux.setLexema(String.valueOf(value));
         aux.setType(field.getType());
         aux.setCode(field.getCode());
-        tab.addData(aux);
+        tab.checkType(aux);
+        tab.getSimbolos().get(Constants.CTE).add(aux);
     }
     return aux;
 }
@@ -484,7 +485,7 @@ public void declarar(String type){
 public LexicalAnalizer getLa() {
     return la;
 }
-//#line 416 "Parser.java"
+//#line 417 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -771,17 +772,18 @@ case 50:
 break;
 case 51:
 //#line 280 "gramatica.y"
-{tg.setFptr((Data)val_peek(0).obj);}
+{la.getSymbolTable().checkType((Data)val_peek(0).obj);
+                                                                            tg.setFptr((Data)val_peek(0).obj);}
 break;
 case 52:
-//#line 282 "gramatica.y"
+//#line 283 "gramatica.y"
 {tg.setFptr(addSymbol((Data)val_peek(0).obj));}
 break;
 case 53:
-//#line 284 "gramatica.y"
+//#line 285 "gramatica.y"
 {tg.setFptr(tg.tercetoI_F((Data)val_peek(1).obj));}
 break;
-//#line 708 "Parser.java"
+//#line 710 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
