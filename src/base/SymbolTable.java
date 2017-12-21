@@ -270,13 +270,19 @@ public class SymbolTable {
         /**Implementar el chequeo de rangos negativo distinguiendo de FLOAT e INT*/
 
         if(Integer.valueOf(data.getType()).intValue() == Constants.INT) {
+            //System.out.println("valor: " + data.getLexema() + ", " + Integer.valueOf(data.getLexema()));
             if (Integer.valueOf(data.getLexema()) < -32768 || Integer.valueOf(data.getLexema()) > 32767) {
-                String s = Printer.getMessage(0, 0, 0, "Constante " + data.getLexema() + " de tipo INT fuera del rango permitido.");
+                String s = Printer.getMessage(0, 0, LexicalAnalizer.values.getCurrentLine(), "Constante " + data.getLexema() + " de tipo INT fuera del rango permitido");
                 this.getCompilationOutput().write(s);
             }
-        } else {
-            if (Float.valueOf(data.getLexema()) < -32768.0F || Float.valueOf(data.getLexema()) > 32767.0F) {
-                String s = Printer.getMessage(0, 0, 0, "Constante " + data.getLexema() + " de tipo FLOAT fuera del rango permitido.");
+        }
+        else {
+            Float inf = Float.valueOf("1.17549435E-38");
+            Float sup = Float.valueOf("3.40282347E38");
+            Float fVal = Float.valueOf(data.getLexema().replace(',','.'));
+
+            if(fVal < inf || fVal > sup){
+                String s = Printer.getMessage(0, 0, LexicalAnalizer.values.getCurrentLine(), "Constante " + data.getLexema() + " de tipo FLOAT fuera del rango permitido");
                 this.getCompilationOutput().write(s);
             }
         }

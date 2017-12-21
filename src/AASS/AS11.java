@@ -34,10 +34,13 @@ public class AS11 extends SemanticAction {
         else{
             Float fVal = Float.valueOf(lex.replace(',','.'));
             lex = fVal.toString();
+
+            //Chequeo de rango de constantes se movio a la etapa semantica debido a los negativos
+            /*
             if(fVal < -32768 || fVal > 32767){
                 String s = Printer.getMessage(0,0, v.getCurrentLine(), "Constante flotante fuera del rango permitido " + lex);
                 st.getCompilationOutput().write(s);
-            }
+            }*/
 
             if (st.getKey(lex) == -1){
 

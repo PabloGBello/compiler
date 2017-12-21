@@ -31,10 +31,11 @@ public class AS10 extends SemanticAction {
 
         Integer intVal = Integer.parseInt(lex);
 
-        if(intVal < -32768 || intVal > 32767){
+        //Chequeo de rango de constantes se movio a la etapa semantica debido a los negativos
+        /*if(intVal < -32768 || intVal > 32767){
             String s = Printer.getMessage(0,0, v.getCurrentLine(), "Constante entera fuera del rango permitido " + lex);
             st.getCompilationOutput().write(s);
-        }
+        }*/
 
         if (st.getKey(lex) == -1){
             st.addItem(Constants.CTE, lex, String.valueOf(Constants.INT));
