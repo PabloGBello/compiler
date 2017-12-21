@@ -466,7 +466,7 @@ public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         aux.setLexema(String.valueOf(value));
         aux.setType(field.getType());
         aux.setCode(field.getCode());
-        tab.checkType(aux);
+        tab.checkRango(aux);
         tab.getSimbolos().get(Constants.CTE).add(aux);
     }
     return aux;
@@ -772,7 +772,7 @@ case 50:
 break;
 case 51:
 //#line 280 "gramatica.y"
-{la.getSymbolTable().checkType((Data)val_peek(0).obj);
+{la.getSymbolTable().checkRango((Data)val_peek(0).obj);
                                                                             tg.setFptr((Data)val_peek(0).obj);}
 break;
 case 52:

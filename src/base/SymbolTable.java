@@ -266,7 +266,7 @@ public class SymbolTable {
     }
 
 
-    public void checkType(Data data){
+    public void checkRango(Data data){
         /**Implementar el chequeo de rangos negativo distinguiendo de FLOAT e INT*/
 
         if(Integer.valueOf(data.getType()).intValue() == Constants.INT) {

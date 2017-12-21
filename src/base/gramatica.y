@@ -277,7 +277,7 @@ termino : termino_a '*' factor                                              {tg.
 
 factor : ID                                                                 {tg.setFptr((Data)$1.obj);}
 
-       | CTE                                                                {la.getSymbolTable().checkType((Data)$1.obj);
+       | CTE                                                                {la.getSymbolTable().checkRango((Data)$1.obj);
                                                                             tg.setFptr((Data)$1.obj);}
 
        | '-'CTE                                                             {tg.setFptr(addSymbol((Data)$2.obj));}
@@ -358,7 +358,7 @@ public Data addSymbol(Data field){ /*Agrega un numero negativo a la tabla*/
         aux.setLexema(String.valueOf(value));
         aux.setType(field.getType());
         aux.setCode(field.getCode());
-        tab.checkType(aux);
+        tab.checkRango(aux);
         tab.getSimbolos().get(Constants.CTE).add(aux);
     }
     return aux;
