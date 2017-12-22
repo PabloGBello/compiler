@@ -28,17 +28,19 @@ public class AS1 extends SemanticAction {
         String lex = v.getBuffer();
 
         super.addToken(lex);
+
         v.subI();
+
+        if (lex.length() > 15) {
+            lex = lex.substring(0, 15);
+            String s = Printer.getMessage(0,0, v.getCurrentLine(), "El identificador supera el maximo de caracteres permitido. Se trunca a los primeros 15 ");
+            st.getCompilationOutput().write(s);
+        }
 
         if (st.getKey(lex) == -1){
             lex = lex.toLowerCase();
             if (st.getKey(lex) == -1) {
                 v.setBuffer(lex.toLowerCase());
-                if (lex.length() > 15) {
-                    lex = lex.substring(0, 15);
-                    String s = Printer.getMessage(0,0, v.getCurrentLine(), "El identificador supera el maximo de caracteres permitido. Se trunca a los primeros 15. " + lex);
-                    st.getCompilationOutput().write(s);
-                }
                 st.addSymbol(Constants.ID, lex);
             }
         }
