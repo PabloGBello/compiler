@@ -119,6 +119,7 @@ public class LexicalAnalizer {
         FSM.add(0, '/', 15);
 
         FSM.add(0, 'l', 1);
+        FSM.add(0, '_', 1);
         FSM.add(0, 'E', 1);
 
 
@@ -457,6 +458,7 @@ public class LexicalAnalizer {
         SemanticAction as12 = new AS12(ST, values);
 
         SA.add(0, 'l', as6);
+        SA.add(0, '_', as6);
         SA.add(0, 'E', as6);
 
 

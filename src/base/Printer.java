@@ -35,7 +35,7 @@ public class Printer {
                 t = "[MENSAJE] ";
             break;
         }
-        return (t + l + ": " + msg + " en linea " + line + "\r\n");
+        return (t + l + ": " + msg + " [ linea " + line + " ]" + "\r\n");
     }
 
 }
