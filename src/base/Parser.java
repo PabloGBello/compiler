@@ -657,7 +657,7 @@ case 8:
 break;
 case 11:
 //#line 105 "gramatica.y"
-{   String msg = "El tipo " + ((Data)val_peek(0).obj).getLexema().toUpperCase()+ " no es valido. No se puede continuar. \\r\\n";
+{   String msg = "El tipo " + ((Data)val_peek(0).obj).getLexema().toUpperCase()+ " no es valido. Se interrumpe la compilacion ";
                                                                                 String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
                                                                                 LexicalAnalizer.compilationOutput.write(s);
                                                                                 System.exit(1);}

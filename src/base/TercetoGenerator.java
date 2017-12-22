@@ -206,7 +206,7 @@ public class TercetoGenerator {
                     + SymbolTable.getTypeReverse(Integer.valueOf(aux2.getType()))
                     + " a un "
                     + SymbolTable.getTypeReverse(Integer.valueOf(aux1.getType()))
-                    + ". Compilación interrumpida.";
+                    + ". Compilación interrumpida ";
             String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
@@ -242,7 +242,7 @@ public class TercetoGenerator {
         }
         else {
 
-            String msg = "Sentencia LET invalida, el lexema " + tercetos.get(i).field1.getLexema() + " ya se encuentra declarado. Compilación interrumpida.";
+            String msg = "Sentencia LET invalida, el lexema " + tercetos.get(i).field1.getLexema() + " ya se encuentra declarado. Compilación interrumpida ";
             String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
             LexicalAnalizer.compilationOutput.write(s);
             System.exit(1);
@@ -291,9 +291,8 @@ public class TercetoGenerator {
         for(Data d : ST.getSimbolos().get(Constants.ID)){
 
             if(d.getType() != null && Integer.valueOf(d.getType()) == Constants.OTHER){
-                msg = "Variable " + d.getLexema() + " no fue declarada. Compilación interrumpida. \\r\\n";
+                msg = "Variable " + d.getLexema() + " no fue declarada. Compilacion interrumpida";
                 s += Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
-
                 wasError = true;
             }
         }

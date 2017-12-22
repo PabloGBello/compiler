@@ -168,8 +168,8 @@ public class SymbolTable {
                     //Variable existe
                     if (item.getType().equals(this.getType(type))) {
                         //Variable en T.S. == tipo que la variable proxima a declarar: ERROR!
-                        String msg = "Declaracion de dos variables iguales y de mismo tipo de forma adyacente. Compilación interrumpida.";
-                        String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg); //v.currentLine
+                        String msg = "Declaracion de dos variables iguales y de mismo tipo de forma adyacente. Compilación interrumpida";
+                        String s = Printer.getMessage(2, 1, LexicalAnalizer.values.getCurrentLine(), msg);
                         LexicalAnalizer.compilationOutput.write(s);
                         System.exit(1);
                     }
