@@ -23,7 +23,7 @@ public class AS4 extends SemanticAction {
     public List<Integer> execute(String c) {
         String lex = v.getBuffer();
         v.setBuffer(lex.substring(0,lex.length() - 3));
-        v.addCharToBuffer( " ");
+        //v.addCharToBuffer( "");
 
         return null;
     }
