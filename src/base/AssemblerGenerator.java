@@ -107,6 +107,7 @@ public class AssemblerGenerator {
             }
             assemblerCode.write(codeAssembler);
         }
+        assemblerCode.write("invoke ExitProcess, 0");
         assemblerCode.write("END START");
         assemblerCode.closeWriter();
         tercetosCode.closeWriter();
